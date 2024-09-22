@@ -32,17 +32,19 @@ export default function Home({ jobs, error }) {
 
     return (
         <div className="container">
+            <head>
+                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+            </head>
             <nav className="navbar">
                 <img src="/logo.png" alt="Logo" className="logo" />
-                <div className="dropdown">
-                    <button className="dropbtn">Schools</button>
-                    <div className="dropdown-content">
-                        <a href="https://www.utoronto.ca/">UofT</a>
-                        <a href="https://uwaterloo.ca/">Waterloo</a>
-                    </div>
+                <div className="schools">
+                    <a href="https://www.utoronto.ca/">University of Toronto</a>
+                    <a href="https://uwaterloo.ca/">Waterloo</a>
                 </div>
+                <button className="upload-button">Upload Salary</button>
             </nav>
             <h1>WLU Co-op Salary</h1>
+            <p>Find and share co-op salaries from various companies.</p>
             {error ? (
                 <p>Error: {error}</p>
             ) : (
@@ -52,6 +54,7 @@ export default function Home({ jobs, error }) {
                         placeholder="Search jobs..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
+                        className="search-input"
                     />
                     {filteredJobs.length > 0 ? (
                         <table>
@@ -89,7 +92,7 @@ export default function Home({ jobs, error }) {
             )}
             <style jsx>{`
                 body {
-                    font-family: 'Arial', sans-serif;
+                    font-family: 'Inter', sans-serif;
                     background-color: #121212;
                     color: white;
                 }
@@ -99,41 +102,48 @@ export default function Home({ jobs, error }) {
                 .navbar {
                     display: flex;
                     align-items: center;
-                    background-color: #333;
+                    justify-content: space-between;
+                    background-color: #2a1863;
                     padding: 10px;
                 }
                 .logo {
                     height: 40px;
-                    margin-right: 20px;
                 }
-                .dropdown {
-                    position: relative;
-                    display: inline-block;
-                }
-                .dropbtn {
-                    background-color: #333;
-                    color: white;
+                .schools {
+                    display: flex;
+                    justify-content: center;
+                    gap: 20px;
+                    border-radius: 15px;
                     padding: 10px;
+                    background: #444;
+                }
+                .schools a {
+                    color: white;
+                    text-decoration: none;
+                }
+                .upload-button {
+                    background-color: #2a1863;
+                    color: white;
+                    padding: 10px 20px;
                     border: none;
+                    border-radius: 15px;
                     cursor: pointer;
-                }
-                .dropdown-content {
-                    display: none;
-                    position: absolute;
-                    background-color: #f9f9f9;
-                    min-width: 160px;
-                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-                    z-index: 1;
-                }
-                .dropdown:hover .dropdown-content {
-                    display: block;
                 }
                 .hero {
                     margin-top: 20px;
+                    text-align: center;
+                }
+                .search-input {
+                    width: 60%;
+                    padding: 10px;
+                    margin-top: 10px;
+                    border-radius: 15px;
+                    border: 1px solid #ccc;
                 }
                 table {
                     width: 100%;
                     border-collapse: collapse;
+                    margin-top: 20px;
                 }
                 th, td {
                     border: 1px solid #444;
@@ -141,7 +151,8 @@ export default function Home({ jobs, error }) {
                     text-align: left;
                 }
                 th {
-                    background-color: #555;
+                    background-color: #2a1863;
+                    color: white;
                 }
             `}</style>
         </div>
