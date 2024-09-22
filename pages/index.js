@@ -100,6 +100,7 @@ export default function Home({ jobs, error }) {
                 }
                 .navbar {
                     display: flex;
+                    justify-content: space-between; /* Space between items */
                     align-items: center;
                     padding: 10px;
                 }
@@ -112,8 +113,7 @@ export default function Home({ jobs, error }) {
                     justify-content: center;
                     background-color: #2a1863;
                     border-radius: 20px;
-                    padding: 5px; /* Adjusted padding */
-                    margin: 0 10px;
+                    padding: 5px;
                 }
                 .schools a {
                     color: white;
@@ -131,7 +131,7 @@ export default function Home({ jobs, error }) {
                 }
                 .hero {
                     text-align: center;
-                    margin: 40px 0; /* Added more vertical spacing */
+                    margin: 40px 0; /* Added vertical spacing */
                 }
                 .search-input {
                     width: 60%;
