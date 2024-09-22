@@ -23,12 +23,36 @@ export async function getServerSideProps() {
 
 export default function Home({ jobs, error }) {
     const [searchTerm, setSearchTerm] = useState('');
+    const [sortConfig, setSortConfig] = useState({ key: '', direction: '' });
 
     const filteredJobs = jobs.filter(job =>
         job.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
         job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
         job.location.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const sortedJobs = [...filteredJobs].sort((a, b) => {
+        if (sortConfig.key) {
+            const aKey = a[sortConfig.key].toLowerCase();
+            const bKey = b[sortConfig.key].toLowerCase();
+
+            if (aKey < bKey) {
+                return sortConfig.direction === 'ascending' ? -1 : 1;
+            }
+            if (aKey > bKey) {
+                return sortConfig.direction === 'ascending' ? 1 : -1;
+            }
+        }
+        return 0;
+    });
+
+    const requestSort = (key) => {
+        let direction = 'ascending';
+        if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+            direction = 'descending';
+        }
+        setSortConfig({ key, direction });
+    };
 
     return (
         <div className="container">
@@ -56,23 +80,39 @@ export default function Home({ jobs, error }) {
             ) : (
                 <div className="gradient-background">
                     <div className="table-section">
-                        {filteredJobs.length > 0 ? (
+                        {sortedJobs.length > 0 ? (
                             <div className="table-container">
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Role</th>
-                                            <th>Company</th>
-                                            <th>Salary</th>
-                                            <th>Location</th>
-                                            <th>Start Date</th>
-                                            <th>Duration</th>
-                                            <th>Program</th>
-                                            <th>Notes</th>
+                                            <th onClick={() => requestSort('role')}>
+                                                Role {sortConfig.key === 'role' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
+                                            </th>
+                                            <th onClick={() => requestSort('company')}>
+                                                Company {sortConfig.key === 'company' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
+                                            </th>
+                                            <th onClick={() => requestSort('salary')}>
+                                                Salary {sortConfig.key === 'salary' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
+                                            </th>
+                                            <th onClick={() => requestSort('location')}>
+                                                Location {sortConfig.key === 'location' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
+                                            </th>
+                                            <th onClick={() => requestSort('start_date')}>
+                                                Start Date {sortConfig.key === 'start_date' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
+                                            </th>
+                                            <th onClick={() => requestSort('duration')}>
+                                                Duration {sortConfig.key === 'duration' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
+                                            </th>
+                                            <th onClick={() => requestSort('program')}>
+                                                Program {sortConfig.key === 'program' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
+                                            </th>
+                                            <th onClick={() => requestSort('notes')}>
+                                                Notes {sortConfig.key === 'notes' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {filteredJobs.map((job) => (
+                                        {sortedJobs.map((job) => (
                                             <tr key={job.id}>
                                                 <td>{job.role}</td>
                                                 <td>{job.company}</td>
@@ -81,7 +121,7 @@ export default function Home({ jobs, error }) {
                                                 <td>{job.start_date}</td>
                                                 <td>{job.duration}</td>
                                                 <td>{job.program}</td>
-                                                <td>{job.notes || "N/A"}</td>
+                                                <td>{job.notes || 'N/A'}</td>
                                             </tr>
                                         ))}
                                     </tbody>
@@ -102,7 +142,7 @@ export default function Home({ jobs, error }) {
                 .container {
                     display: flex;
                     flex-direction: column;
-                    min-height: 100vh; /* Ensures the container takes full viewport height */
+                    min-height: 100vh;
                 }
                 .navbar {
                     display: flex;
@@ -156,28 +196,28 @@ export default function Home({ jobs, error }) {
                     border: 2px solid #2a1863;
                 }
                 .gradient-background {
-                    flex-grow: 1; /* Ensure the gradient background fills the remaining space */
+                    flex-grow: 1;
                     display: flex;
                     flex-direction: column;
-                    justify-content: flex-start; /* Start content from the top */
+                    justify-content: flex-start;
                     background: linear-gradient(to bottom, #121212, #2a1863);
                 }
                 .table-section {
-                    flex-grow: 1; /* Allows the table section to grow and fill remaining space */
-                    overflow-y: auto; /* Enables vertical scrolling if content overflows */
-                    overflow-x: auto; /* Prevents horizontal overflow */
+                    flex-grow: 1;
+                    overflow-y: auto;
+                    overflow-x: auto;
                     background: white;
-                    padding: 0; /* Removes any padding */
-                    margin: 0; /* Removes any margin */
+                    padding: 0;
+                    margin: 0;
                     display: flex;
                     flex-direction: column;
                 }
                 .table-container {
-                    flex-grow: 1; /* Ensures the table container stretches to fill space */
-                    margin-top: 0; /* No top margin */
+                    flex-grow: 1;
+                    margin-top: 0;
                     display: flex;
                     flex-direction: column;
-                    justify-content: flex-start; /* Aligns table content to the top */
+                    justify-content: flex-start;
                 }
                 table {
                     width: 100%;
@@ -191,6 +231,7 @@ export default function Home({ jobs, error }) {
                 th {
                     background-color: #2a1863;
                     color: white;
+                    cursor: pointer;
                 }
             `}</style>
         </div>
