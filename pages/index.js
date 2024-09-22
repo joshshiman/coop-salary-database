@@ -90,10 +90,8 @@ export default function Home({ jobs, error }) {
                 </div>
             )}
             <style jsx>{`
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-
                 body {
-                    font-family: 'Inter', sans-serif;
+                    font-family: 'Arial', sans-serif;
                     background-color: #121212;
                     color: white;
                 }
@@ -113,14 +111,16 @@ export default function Home({ jobs, error }) {
                     display: flex;
                     justify-content: center;
                     flex-grow: 1;
+                    background-color: #2a1863;
+                    border-radius: 20px;
+                    padding: 10px;
+                    margin: 0 10px;
                 }
                 .schools a {
-                    background-color: #2a1863;
                     color: white;
                     padding: 10px 15px;
-                    border-radius: 20px;
-                    margin: 0 10px;
                     text-decoration: none;
+                    margin: 0 5px;
                 }
                 .upload-button {
                     background-color: #2a1863;
@@ -132,12 +132,13 @@ export default function Home({ jobs, error }) {
                 }
                 .hero {
                     text-align: center;
-                    margin-top: 20px;
+                    margin: 40px 0; /* Added more vertical spacing */
                 }
                 .search-input {
                     width: 60%;
                     padding: 10px;
                     margin-top: 10px;
+                    margin-bottom: 40px; /* Added bottom spacing */
                 }
                 .table-container {
                     padding-top: 20px;
