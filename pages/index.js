@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 export async function getServerSideProps() {
-    const res = await fetch(`${process.env.'https://coop-salary-database.vercel.app/' || 'http://localhost:3000'}/api/jobs`);
+    const res = await fetch(`${process.env.VERCEL_URL || 'http://localhost:3000'}/api/jobs`);
     const jobs = await res.json();
 
     return { props: { jobs } };
