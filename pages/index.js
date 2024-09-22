@@ -1,11 +1,15 @@
 import { useState } from 'react';
 
 export async function getServerSideProps() {
-    const res = await fetch(`${process.env.VERCEL_URL || 'http://localhost:3000'}/api/jobs`);
+    const url = process.env.VERCEL_URL 
+        ? `https://${process.env.VERCEL_URL}/api/jobs` 
+        : 'http://localhost:3000/api/jobs';
+
+    const res = await fetch(url);
 
     if (!res.ok) {
         console.error('Failed to fetch jobs:', res.status);
-        return { props: { jobs: [] } };
+        return { props: { jobs: [] } }; // Return an empty jobs array
     }
     
     const jobs = await res.json();
