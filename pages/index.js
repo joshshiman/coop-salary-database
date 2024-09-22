@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 export async function getServerSideProps() {
     const url = process.env.VERCEL_URL 
         ? `https://${process.env.VERCEL_URL}/api/jobs` 
@@ -18,17 +20,18 @@ export default function Home({ jobs }) {
         <div>
             <h1>Co-op Job Repository</h1>
             <div>
-                {jobs && jobs.length > 0 ? (
-                    jobs.map((job) => (
-                        <div key={job.id}>
-                            <h3>{job.role}</h3>
-                            <p>{job.company} - {job.salary}</p>
-                            <p>{job.location}</p>
-                        </div>
-                    ))
-                ) : (
-                    <p>No jobs available.</p>
-                )}
+                {jobs.map((job) => (
+                    <div key={job.id}>
+                        <h3>{job.role}</h3>
+                        <p>Company: {job.company}</p>
+                        <p>Salary: {job.salary}</p>
+                        <p>Location: {job.location}</p>
+                        <p>Start Date: {job.start_date}</p>
+                        <p>Duration: {job.duration}</p>
+                        <p>Program: {job.program}</p>
+                        <p>Notes: {job.notes || "N/A"}</p>
+                    </div>
+                ))}
             </div>
         </div>
     );
