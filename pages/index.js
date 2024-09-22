@@ -33,7 +33,7 @@ export default function Home({ jobs, error }) {
     return (
         <div className="container">
             <nav className="navbar">
-                <img src="/logo.png" alt="Logo" className="logo" />
+                <img src="/mapleleaflogo.png" alt="Logo" className="logo" />
                 <div className="schools">
                     <a href="https://uoftcoopsalary.pages.dev/">uoft</a>
                     <a href="https://docs.google.com/spreadsheets/d/1kMBu1_TONgzZ0Ysz3d2OYiu1O8kDftZxT3INxrz8hII/edit#gid=0">uw</a>
@@ -95,12 +95,14 @@ export default function Home({ jobs, error }) {
             )}
             <style jsx>{`
                 body {
-                    font-family: 'Inter', sans-serif; 
+                    font-family: 'Inter', sans-serif;
                     background-color: #121212;
                     color: white;
                 }
                 .container {
-                    padding: 0; /* Remove padding from the entire page */
+                    display: flex;
+                    flex-direction: column;
+                    min-height: 100vh; /* Ensure the container covers the full height */
                 }
                 .navbar {
                     display: flex;
@@ -124,6 +126,11 @@ export default function Home({ jobs, error }) {
                     padding: 10px 15px;
                     text-decoration: none;
                     margin: 0 5px;
+                    transition: background-color 0.3s ease;
+                }
+                .schools a:hover {
+                    background-color: #ffb347;
+                    border-radius: 10px;
                 }
                 .upload-button {
                     background-color: #2a1863;
@@ -136,26 +143,32 @@ export default function Home({ jobs, error }) {
                 .hero {
                     text-align: center;
                     margin: 40px 0;
-                    padding: 0 20px; /* Add left and right padding just for the hero section */
+                    padding: 0 20px;
                 }
                 .search-input {
                     width: 60%;
                     padding: 10px;
                     margin-top: 10px;
                     margin-bottom: 40px;
-                    border-radius: 25px; /* Rounded corners */
+                    border-radius: 25px;
                     outline: none;
-                    border: 2px solid #2a1863; /* Outline in #2a1863 */
+                    border: 2px solid #2a1863;
                 }
-
+                .gradient-background {
+                    flex-grow: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-end; /* Ensures the table goes to the bottom */
+                    background: linear-gradient(to bottom, #121212, #2a1863);
+                }
                 .table-section {
-                    max-height: 400px; /* Fixed height for the section */
-                    overflow: auto; /* Enable scrolling */
                     background: white;
-                    padding-bottom: 0; /* Remove bottom padding */
+                    padding-bottom: 0;
+                    flex-shrink: 0;
+                    margin-top: auto; /* Push the table to the bottom */
                 }
                 .table-container {
-                    padding-top: 20px;
+                    padding: 20px;
                 }
                 table {
                     width: 100%;
