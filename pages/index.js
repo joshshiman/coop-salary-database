@@ -8,7 +8,7 @@ export async function getServerSideProps() {
         if (!res.ok) {
             throw new Error(`Fetch failed with status: ${res.status}`);
         }
-        
+
         const jobs = await res.json();
         if (!Array.isArray(jobs)) {
             throw new Error('Invalid data format');
@@ -32,9 +32,6 @@ export default function Home({ jobs, error }) {
 
     return (
         <div className="container">
-            <head>
-                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-            </head>
             <nav className="navbar">
                 <img src="/logo.png" alt="Logo" className="logo" />
                 <div className="schools">
@@ -43,19 +40,21 @@ export default function Home({ jobs, error }) {
                 </div>
                 <button className="upload-button">Upload Salary</button>
             </nav>
-            <h1>WLU Co-op Salary</h1>
-            <p>Find and share co-op salaries from various companies.</p>
+            <div className="hero">
+                <h1>WLU Co-op Salary</h1>
+                <p>Find the best co-op jobs and salaries available for students.</p>
+                <input
+                    type="text"
+                    placeholder="Search jobs..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="search-input"
+                />
+            </div>
             {error ? (
                 <p>Error: {error}</p>
             ) : (
-                <div className="hero">
-                    <input
-                        type="text"
-                        placeholder="Search jobs..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="search-input"
-                    />
+                <div className="table-container">
                     {filteredJobs.length > 0 ? (
                         <table>
                             <thead>
@@ -91,6 +90,8 @@ export default function Home({ jobs, error }) {
                 </div>
             )}
             <style jsx>{`
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
                 body {
                     font-family: 'Inter', sans-serif;
                     background-color: #121212;
@@ -102,23 +103,23 @@ export default function Home({ jobs, error }) {
                 .navbar {
                     display: flex;
                     align-items: center;
-                    justify-content: space-between;
-                    background-color: #2a1863;
                     padding: 10px;
                 }
                 .logo {
                     height: 40px;
+                    margin-right: 20px;
                 }
                 .schools {
                     display: flex;
                     justify-content: center;
-                    gap: 20px;
-                    border-radius: 15px;
-                    padding: 10px;
-                    background: #444;
+                    flex-grow: 1;
                 }
                 .schools a {
+                    background-color: #2a1863;
                     color: white;
+                    padding: 10px 15px;
+                    border-radius: 20px;
+                    margin: 0 10px;
                     text-decoration: none;
                 }
                 .upload-button {
@@ -126,24 +127,24 @@ export default function Home({ jobs, error }) {
                     color: white;
                     padding: 10px 20px;
                     border: none;
-                    border-radius: 15px;
+                    border-radius: 20px;
                     cursor: pointer;
                 }
                 .hero {
-                    margin-top: 20px;
                     text-align: center;
+                    margin-top: 20px;
                 }
                 .search-input {
                     width: 60%;
                     padding: 10px;
                     margin-top: 10px;
-                    border-radius: 15px;
-                    border: 1px solid #ccc;
+                }
+                .table-container {
+                    padding-top: 20px;
                 }
                 table {
                     width: 100%;
                     border-collapse: collapse;
-                    margin-top: 20px;
                 }
                 th, td {
                     border: 1px solid #444;
