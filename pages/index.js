@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 export async function getServerSideProps() {
     const url = `https://${process.env.VERCEL_URL}/api/jobs`;
 
@@ -20,6 +22,15 @@ export async function getServerSideProps() {
 }
 
 export default function Home({ jobs, error }) {
+    const [searchTerm, setSearchTerm] = useState('');
+
+    // Filter jobs based on the search term
+    const filteredJobs = jobs.filter(job =>
+        job.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.location.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <div>
             <h1>Co-op Job Repository</h1>
@@ -27,8 +38,14 @@ export default function Home({ jobs, error }) {
                 <p>Error: {error}</p>
             ) : (
                 <div>
-                    {jobs.length > 0 ? (
-                        jobs.map((job) => (
+                    <input
+                        type="text"
+                        placeholder="Search jobs..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    {filteredJobs.length > 0 ? (
+                        filteredJobs.map((job) => (
                             <div key={job.id}>
                                 <h3>{job.role}</h3>
                                 <p>Company: {job.company}</p>
