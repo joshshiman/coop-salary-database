@@ -164,7 +164,7 @@ export default function Home({ jobs, error }) {
                 .table-section {
                     max-height: 400px; /* Limit the height of the table section */
                     overflow-y: auto; /* Scroll vertically if needed */
-                    overflow-x: hidden; /* Prevent horizontal overflow */
+                    overflow-x: auto; /* Prevent horizontal overflow */
                     background: white;
                     padding: 0; /* Remove padding */
                 }
