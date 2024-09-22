@@ -35,8 +35,8 @@ export default function Home({ jobs, error }) {
             <nav className="navbar">
                 <img src="/logo.png" alt="Logo" className="logo" />
                 <div className="schools">
-                    <a href="https://www.utoronto.ca/">University of Toronto</a>
-                    <a href="https://uwaterloo.ca/">Waterloo</a>
+                    <a href="https://www.utoronto.ca/">uoft</a>
+                    <a href="https://uwaterloo.ca/">uw</a>
                 </div>
                 <button className="upload-button">Upload Salary</button>
             </nav>
@@ -54,41 +54,43 @@ export default function Home({ jobs, error }) {
             {error ? (
                 <p>Error: {error}</p>
             ) : (
-                <div className="table-section">
-                    {filteredJobs.length > 0 ? (
-                        <div className="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Role</th>
-                                        <th>Company</th>
-                                        <th>Salary</th>
-                                        <th>Location</th>
-                                        <th>Start Date</th>
-                                        <th>Duration</th>
-                                        <th>Program</th>
-                                        <th>Notes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {filteredJobs.map((job) => (
-                                        <tr key={job.id}>
-                                            <td>{job.role}</td>
-                                            <td>{job.company}</td>
-                                            <td>{job.salary}</td>
-                                            <td>{job.location}</td>
-                                            <td>{job.start_date}</td>
-                                            <td>{job.duration}</td>
-                                            <td>{job.program}</td>
-                                            <td>{job.notes || "N/A"}</td>
+                <div className="gradient-background">
+                    <div className="table-section">
+                        {filteredJobs.length > 0 ? (
+                            <div className="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Role</th>
+                                            <th>Company</th>
+                                            <th>Salary</th>
+                                            <th>Location</th>
+                                            <th>Start Date</th>
+                                            <th>Duration</th>
+                                            <th>Program</th>
+                                            <th>Notes</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    ) : (
-                        <p>No information found.</p>
-                    )}
+                                    </thead>
+                                    <tbody>
+                                        {filteredJobs.map((job) => (
+                                            <tr key={job.id}>
+                                                <td>{job.role}</td>
+                                                <td>{job.company}</td>
+                                                <td>{job.salary}</td>
+                                                <td>{job.location}</td>
+                                                <td>{job.start_date}</td>
+                                                <td>{job.duration}</td>
+                                                <td>{job.program}</td>
+                                                <td>{job.notes || "N/A"}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ) : (
+                            <p>No information found.</p>
+                        )}
+                    </div>
                 </div>
             )}
             <style jsx>{`
@@ -113,12 +115,12 @@ export default function Home({ jobs, error }) {
                 .schools {
                     display: flex;
                     justify-content: center;
-                    background-color: #2a1863;
+                    background-color: white;
                     border-radius: 20px;
                     padding: 5px;
                 }
                 .schools a {
-                    color: white;
+                    color: #2a1863;
                     padding: 10px 15px;
                     text-decoration: none;
                     margin: 0 5px;
@@ -141,9 +143,11 @@ export default function Home({ jobs, error }) {
                     margin-top: 10px;
                     margin-bottom: 40px;
                 }
+
                 .table-section {
                     max-height: 400px; /* Fixed height for the section */
                     overflow: auto; /* Enable scrolling */
+                    background: white
                 }
                 .table-container {
                     padding-top: 20px;
