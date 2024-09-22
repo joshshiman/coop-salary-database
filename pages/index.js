@@ -130,21 +130,15 @@ export default function Home({ jobs, error }) {
                 .schools a:hover {
                     background-color: #2a1863;
                     border-radius: 20px;
-                    color: white
-
+                    color: white;
                 }
                 .upload-button {
-                    background-color: #121212;
+                    background-color: #2a1863;
                     color: white;
                     padding: 10px 20px;
                     border: none;
                     border-radius: 30px;
                     cursor: pointer;
-                }
-                .upload-button a:hover {
-                    background-color: #2a1863;
-                    border-radius: 20px;
-                    color: white
                 }
                 .hero {
                     text-align: center;
@@ -164,7 +158,6 @@ export default function Home({ jobs, error }) {
                     flex-grow: 1;
                     display: flex;
                     flex-direction: column;
-                    justify-content: flex-start; /* Start content from top */
                     background: linear-gradient(to bottom, #121212, #2a1863);
                 }
                 .table-section {
@@ -173,9 +166,11 @@ export default function Home({ jobs, error }) {
                     overflow-x: auto; /* Prevent horizontal overflow */
                     background: white;
                     padding: 0; /* Remove padding */
+                    margin-bottom: 0; /* Prevent any extra footer space */
+                    flex-grow: 1;
                 }
                 .table-container {
-                    margin-top: 0; /* No top padding */
+                    padding-top: 0; /* Remove top padding */
                 }
                 table {
                     width: 100%;
