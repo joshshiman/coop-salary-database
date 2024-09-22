@@ -47,10 +47,17 @@ export default function Home({ jobs, error }) {
     });
 
     const requestSort = (key) => {
-        let direction = 'ascending';
-        if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-            direction = 'descending';
+        if (key === 'notes') {
+            // Clear sorting for the Notes column
+            setSortConfig({ key: '', direction: '' });
+            return;
         }
+    
+        let direction = 'ascending';
+        if (sortConfig.key === key) {
+            direction = sortConfig.direction === 'ascending' ? 'descending' : 'ascending';
+        }
+    
         setSortConfig({ key, direction });
     };
 
@@ -105,6 +112,9 @@ export default function Home({ jobs, error }) {
                                             </th>
                                             <th onClick={() => requestSort('program')}>
                                                 Program {sortConfig.key === 'program' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
+                                            </th>
+                                            <th onClick={() => requestSort('notes')}>
+                                                Notes {sortConfig.key === 'notes' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
                                             </th>
                                         </tr>
                                     </thead>
