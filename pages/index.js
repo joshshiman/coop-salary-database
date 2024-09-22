@@ -33,7 +33,7 @@ export default function Home({ jobs, error }) {
     return (
         <div className="container">
             <nav className="navbar">
-                <img src="/mapleleaflogo.jpg" alt="Logo" className="logo" />
+                <img src="/logo.jpg" alt="Logo" className="logo" />
                 <div className="schools">
                     <a href="https://uoftcoopsalary.pages.dev/">uoft</a>
                     <a href="https://docs.google.com/spreadsheets/d/1kMBu1_TONgzZ0Ysz3d2OYiu1O8kDftZxT3INxrz8hII/edit#gid=0">uw</a>
