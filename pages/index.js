@@ -91,7 +91,7 @@ export default function Home({ jobs, error }) {
             )}
             <style jsx>{`
                 body {
-                    font-family: 'Arial', sans-serif;
+                    font-family: 'Inter', sans-serif; /* Change to Inter font */
                     background-color: #121212;
                     color: white;
                 }
@@ -100,7 +100,7 @@ export default function Home({ jobs, error }) {
                 }
                 .navbar {
                     display: flex;
-                    justify-content: space-between; /* Space between items */
+                    justify-content: space-between;
                     align-items: center;
                     padding: 10px;
                 }
