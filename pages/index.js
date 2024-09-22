@@ -123,7 +123,7 @@ export default function Home({ jobs, error }) {
                                             <tr key={job.id}>
                                                 <td>{job.role}</td>
                                                 <td>{job.company}</td>
-                                                <td>{job.salary}</td>
+                                                <td>{job.salary ? `$${job.salary} / Hour CAD` : 'N/A'}</td>
                                                 <td>{job.location}</td>
                                                 <td>{job.start_date}</td>
                                                 <td>{job.duration}</td>
