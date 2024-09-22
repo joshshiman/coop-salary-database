@@ -33,7 +33,7 @@ export default function Home({ jobs, error }) {
     return (
         <div className="container">
             <nav className="navbar">
-                <img src="/mapleleaflogo.png" alt="Logo" className="logo" />
+                <img src="/mapleleaflogo.jpg" alt="Logo" className="logo" />
                 <div className="schools">
                     <a href="https://uoftcoopsalary.pages.dev/">uoft</a>
                     <a href="https://docs.google.com/spreadsheets/d/1kMBu1_TONgzZ0Ysz3d2OYiu1O8kDftZxT3INxrz8hII/edit#gid=0">uw</a>
@@ -118,7 +118,7 @@ export default function Home({ jobs, error }) {
                     display: flex;
                     justify-content: center;
                     background-color: white;
-                    border-radius: 20px;
+                    border-radius: 30px;
                     padding: 5px;
                 }
                 .schools a {
@@ -126,19 +126,25 @@ export default function Home({ jobs, error }) {
                     padding: 10px 15px;
                     text-decoration: none;
                     margin: 0 5px;
-                    transition: background-color 0.3s ease;
                 }
                 .schools a:hover {
-                    background-color: #ffb347;
-                    border-radius: 10px;
+                    background-color: #2a1863;
+                    border-radius: 20px;
+                    color: white
+
                 }
                 .upload-button {
-                    background-color: #2a1863;
+                    background-color: #121212;
                     color: white;
                     padding: 10px 20px;
                     border: none;
-                    border-radius: 20px;
+                    border-radius: 30px;
                     cursor: pointer;
+                }
+                .upload-button a:hover {
+                    background-color: #2a1863;
+                    border-radius: 20px;
+                    color: white
                 }
                 .hero {
                     text-align: center;
