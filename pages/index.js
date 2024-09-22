@@ -106,9 +106,6 @@ export default function Home({ jobs, error }) {
                                             <th onClick={() => requestSort('program')}>
                                                 Program {sortConfig.key === 'program' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
                                             </th>
-                                            <th onClick={() => requestSort('notes')}>
-                                                Notes {sortConfig.key === 'notes' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
-                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
