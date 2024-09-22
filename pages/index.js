@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 export async function getServerSideProps() {
     const url = process.env.VERCEL_URL 
         ? `https://${process.env.VERCEL_URL}/api/jobs` 
@@ -8,8 +6,7 @@ export async function getServerSideProps() {
     const res = await fetch(url);
 
     if (!res.ok) {
-        console.error('Failed to fetch jobs:', res.status);
-        return { props: { jobs: [] } }; // Return an empty jobs array
+        return { props: { jobs: [] } }; // Return an empty jobs array on error
     }
     
     const jobs = await res.json();
@@ -21,9 +18,7 @@ export default function Home({ jobs }) {
         <div>
             <h1>Co-op Job Repository</h1>
             <div>
-                {jobs.length === 0 ? (
-                    <p>No jobs available.</p>
-                ) : (
+                {jobs && jobs.length > 0 ? (
                     jobs.map((job) => (
                         <div key={job.id}>
                             <h3>{job.role}</h3>
@@ -31,6 +26,8 @@ export default function Home({ jobs }) {
                             <p>{job.location}</p>
                         </div>
                     ))
+                ) : (
+                    <p>No jobs available.</p>
                 )}
             </div>
         </div>
