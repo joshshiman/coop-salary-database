@@ -18,15 +18,10 @@ export async function getServerSideProps() {
 
 export default function Home({ jobs }) {
     const [searchTerm, setSearchTerm] = useState('');
-    const [sortOrder, setSortOrder] = useState('asc');
 
     const filteredJobs = jobs.filter(job =>
         job.job_title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         job.company.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    const sortedJobs = [...filteredJobs].sort((a, b) =>
-        sortOrder === 'asc' ? a.salary - b.salary : b.salary - a.salary
     );
 
     return (
@@ -37,15 +32,11 @@ export default function Home({ jobs }) {
                 placeholder="Search..."
                 onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <select onChange={(e) => setSortOrder(e.target.value)}>
-                <option value="asc">Sort by Salary: Low to High</option>
-                <option value="desc">Sort by Salary: High to Low</option>
-            </select>
             <div>
-                {sortedJobs.length === 0 ? (
+                {filteredJobs.length === 0 ? (
                     <p>No jobs available.</p>
                 ) : (
-                    sortedJobs.map((job) => (
+                    filteredJobs.map((job) => (
                         <div key={job.id}>
                             <h3>{job.job_title}</h3>
                             <p>{job.company} - ${job.salary}</p>
