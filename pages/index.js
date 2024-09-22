@@ -110,10 +110,9 @@ export default function Home({ jobs, error }) {
                 .schools {
                     display: flex;
                     justify-content: center;
-                    flex-grow: 1;
                     background-color: #2a1863;
                     border-radius: 20px;
-                    padding: 10px;
+                    padding: 5px; /* Adjusted padding */
                     margin: 0 10px;
                 }
                 .schools a {
