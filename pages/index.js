@@ -143,11 +143,9 @@ export default function Home({ jobs, error }) {
                 }
                 .table-section {
                     max-height: 400px; /* Fixed height for the section */
-                    overflow: hidden;
+                    overflow: auto; /* Enable scrolling */
                 }
                 .table-container {
-                    height: 100%; /* Full height of the section */
-                    overflow: auto; /* Enable scrolling */
                     padding-top: 20px;
                 }
                 table {
