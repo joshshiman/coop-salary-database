@@ -102,7 +102,7 @@ export default function Home({ jobs, error }) {
                 .container {
                     display: flex;
                     flex-direction: column;
-                    min-height: 100vh;
+                    min-height: 100vh; /* Ensures the container takes full viewport height */
                 }
                 .navbar {
                     display: flex;
@@ -140,6 +140,7 @@ export default function Home({ jobs, error }) {
                     border-radius: 30px;
                     cursor: pointer;
                 }
+
                 .hero {
                     text-align: center;
                     margin: 40px 0;
@@ -155,22 +156,28 @@ export default function Home({ jobs, error }) {
                     border: 2px solid #2a1863;
                 }
                 .gradient-background {
-                    flex-grow: 1;
+                    flex-grow: 1; /* Ensure the gradient background fills the remaining space */
                     display: flex;
                     flex-direction: column;
+                    justify-content: flex-start; /* Start content from the top */
                     background: linear-gradient(to bottom, #121212, #2a1863);
                 }
                 .table-section {
-                    max-height: 400px; /* Limit the height of the table section */
-                    overflow-y: auto; /* Scroll vertically if needed */
-                    overflow-x: auto; /* Prevent horizontal overflow */
+                    flex-grow: 1; /* Allows the table section to grow and fill remaining space */
+                    overflow-y: auto; /* Enables vertical scrolling if content overflows */
+                    overflow-x: auto; /* Prevents horizontal overflow */
                     background: white;
-                    padding: 0; /* Remove padding */
-                    margin-bottom: 0; /* Prevent any extra footer space */
-                    flex-grow: 1;
+                    padding: 0; /* Removes any padding */
+                    margin: 0; /* Removes any margin */
+                    display: flex;
+                    flex-direction: column;
                 }
                 .table-container {
-                    padding-top: 0; /* Remove top padding */
+                    flex-grow: 1; /* Ensures the table container stretches to fill space */
+                    margin-top: 0; /* No top margin */
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start; /* Aligns table content to the top */
                 }
                 table {
                     width: 100%;
