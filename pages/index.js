@@ -91,7 +91,7 @@ export default function Home({ jobs, error }) {
             )}
             <style jsx>{`
                 body {
-                    font-family: 'Inter', sans-serif; /* Change to Inter font */
+                    font-family: 'Inter', sans-serif; 
                     background-color: #121212;
                     color: white;
                 }
