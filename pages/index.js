@@ -35,14 +35,14 @@ export default function Home({ jobs, error }) {
             <nav className="navbar">
                 <img src="/logo.png" alt="Logo" className="logo" />
                 <div className="schools">
-                    <a href="https://www.utoronto.ca/">uoft</a>
-                    <a href="https://uwaterloo.ca/">uw</a>
+                    <a href="https://uoftcoopsalary.pages.dev/">uoft</a>
+                    <a href="https://docs.google.com/spreadsheets/d/1kMBu1_TONgzZ0Ysz3d2OYiu1O8kDftZxT3INxrz8hII/edit#gid=0">uw</a>
                 </div>
                 <button className="upload-button">Upload Salary</button>
             </nav>
             <div className="hero">
                 <h1>WLU Co-op Salary</h1>
-                <p>Find the best co-op jobs and salaries available for students.</p>
+                <p>Employees in Ontario have the right to discuss their salaries based on both the Pay Transparency Act and the Employment Standards Act</p>
                 <input
                     type="text"
                     placeholder="Search jobs..."
@@ -100,7 +100,7 @@ export default function Home({ jobs, error }) {
                     color: white;
                 }
                 .container {
-                    padding: 20px;
+                    padding: 0; /* Remove padding from the entire page */
                 }
                 .navbar {
                     display: flex;
@@ -136,6 +136,7 @@ export default function Home({ jobs, error }) {
                 .hero {
                     text-align: center;
                     margin: 40px 0;
+                    padding: 0 20px; /* Add left and right padding just for the hero section */
                 }
                 .search-input {
                     width: 60%;
@@ -147,7 +148,7 @@ export default function Home({ jobs, error }) {
                 .table-section {
                     max-height: 400px; /* Fixed height for the section */
                     overflow: auto; /* Enable scrolling */
-                    background: white
+                    background: white;
                 }
                 .table-container {
                     padding-top: 20px;
