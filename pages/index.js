@@ -1,14 +1,12 @@
 import { useEffect } from 'react';
 
 export async function getServerSideProps() {
-    const url = process.env.VERCEL_URL 
-        ? `https://${process.env.VERCEL_URL}/api/jobs` 
-        : 'http://localhost:3000/api/jobs';
+    const url = `https://${process.env.VERCEL_URL}/api/jobs`; 
 
     const res = await fetch(url);
 
     if (!res.ok) {
-        return { props: { jobs: [] } }; // Return an empty jobs array on error
+        return { props: { jobs: [] } };
     }
     
     const jobs = await res.json();
