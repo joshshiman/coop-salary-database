@@ -5,7 +5,7 @@ export async function getServerSideProps() {
 
     if (!res.ok) {
         console.error('Failed to fetch jobs:', res.status);
-        return { props: { jobs: [] } }; // Return an empty jobs array
+        return { props: { jobs: [] } };
     }
     
     const jobs = await res.json();
