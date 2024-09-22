@@ -92,28 +92,28 @@ export default function Home({ jobs, error }) {
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th onClick={() => requestSort('role')}>
+                                            <th style={{ width: '20%' }} onClick={() => requestSort('role')}>
                                                 Role {sortConfig.key === 'role' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
                                             </th>
-                                            <th onClick={() => requestSort('company')}>
+                                            <th style={{ width: '20%' }} onClick={() => requestSort('company')}>
                                                 Company {sortConfig.key === 'company' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
                                             </th>
-                                            <th onClick={() => requestSort('salary')}>
+                                            <th style={{ width: '15%' }} onClick={() => requestSort('salary')}>
                                                 Salary {sortConfig.key === 'salary' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
                                             </th>
-                                            <th onClick={() => requestSort('location')}>
+                                            <th style={{ width: '15%' }} onClick={() => requestSort('location')}>
                                                 Location {sortConfig.key === 'location' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
                                             </th>
-                                            <th onClick={() => requestSort('start_date')}>
+                                            <th style={{ width: '10%' }} onClick={() => requestSort('start_date')}>
                                                 Start Date {sortConfig.key === 'start_date' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
                                             </th>
-                                            <th onClick={() => requestSort('duration')}>
+                                            <th style={{ width: '5%' }} onClick={() => requestSort('duration')}>
                                                 Duration {sortConfig.key === 'duration' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
                                             </th>
-                                            <th onClick={() => requestSort('program')}>
+                                            <th style={{ width: '5%' }} onClick={() => requestSort('program')}>
                                                 Program {sortConfig.key === 'program' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
                                             </th>
-                                            <th onClick={() => requestSort('notes')}>
+                                            <th style={{ width: '20%' }} onClick={() => requestSort('notes')}>
                                                 Notes {sortConfig.key === 'notes' ? (sortConfig.direction === 'ascending' ? '↑' : '↓') : ''}
                                             </th>
                                         </tr>
