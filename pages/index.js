@@ -39,8 +39,7 @@ export default function Home({ jobs }) {
                     filteredJobs.map((job) => (
                         <div key={job.id}>
                             <h3>{job.job_title}</h3>
-                            <p>{job.company} - ${job.salary}</p>
-                            <p>{job.location}</p>
+                            <p>{job.company} - {job.salary}</p>
                         </div>
                     ))
                 )}
