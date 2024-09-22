@@ -54,36 +54,38 @@ export default function Home({ jobs, error }) {
             {error ? (
                 <p>Error: {error}</p>
             ) : (
-                <div className="table-container">
+                <div className="table-section">
                     {filteredJobs.length > 0 ? (
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Role</th>
-                                    <th>Company</th>
-                                    <th>Salary</th>
-                                    <th>Location</th>
-                                    <th>Start Date</th>
-                                    <th>Duration</th>
-                                    <th>Program</th>
-                                    <th>Notes</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredJobs.map((job) => (
-                                    <tr key={job.id}>
-                                        <td>{job.role}</td>
-                                        <td>{job.company}</td>
-                                        <td>{job.salary}</td>
-                                        <td>{job.location}</td>
-                                        <td>{job.start_date}</td>
-                                        <td>{job.duration}</td>
-                                        <td>{job.program}</td>
-                                        <td>{job.notes || "N/A"}</td>
+                        <div className="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Role</th>
+                                        <th>Company</th>
+                                        <th>Salary</th>
+                                        <th>Location</th>
+                                        <th>Start Date</th>
+                                        <th>Duration</th>
+                                        <th>Program</th>
+                                        <th>Notes</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {filteredJobs.map((job) => (
+                                        <tr key={job.id}>
+                                            <td>{job.role}</td>
+                                            <td>{job.company}</td>
+                                            <td>{job.salary}</td>
+                                            <td>{job.location}</td>
+                                            <td>{job.start_date}</td>
+                                            <td>{job.duration}</td>
+                                            <td>{job.program}</td>
+                                            <td>{job.notes || "N/A"}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     ) : (
                         <p>No information found.</p>
                     )}
@@ -131,15 +133,21 @@ export default function Home({ jobs, error }) {
                 }
                 .hero {
                     text-align: center;
-                    margin: 40px 0; /* Added vertical spacing */
+                    margin: 40px 0;
                 }
                 .search-input {
                     width: 60%;
                     padding: 10px;
                     margin-top: 10px;
-                    margin-bottom: 40px; /* Added bottom spacing */
+                    margin-bottom: 40px;
+                }
+                .table-section {
+                    max-height: 400px; /* Fixed height for the section */
+                    overflow: hidden;
                 }
                 .table-container {
+                    height: 100%; /* Full height of the section */
+                    overflow: auto; /* Enable scrolling */
                     padding-top: 20px;
                 }
                 table {
