@@ -102,7 +102,7 @@ export default function Home({ jobs, error }) {
                 .container {
                     display: flex;
                     flex-direction: column;
-                    min-height: 100vh; /* Ensure the container covers the full height */
+                    min-height: 100vh;
                 }
                 .navbar {
                     display: flex;
@@ -158,17 +158,18 @@ export default function Home({ jobs, error }) {
                     flex-grow: 1;
                     display: flex;
                     flex-direction: column;
-                    justify-content: flex-end; /* Ensures the table goes to the bottom */
+                    justify-content: flex-start; /* Start content from top */
                     background: linear-gradient(to bottom, #121212, #2a1863);
                 }
                 .table-section {
+                    max-height: 400px; /* Limit the height of the table section */
+                    overflow-y: auto; /* Scroll vertically if needed */
+                    overflow-x: hidden; /* Prevent horizontal overflow */
                     background: white;
-                    padding-bottom: 0;
-                    flex-shrink: 0;
-                    margin-top: auto; /* Push the table to the bottom */
+                    padding: 0; /* Remove padding */
                 }
                 .table-container {
-                    padding: 20px;
+                    margin-top: 0; /* No top padding */
                 }
                 table {
                     width: 100%;
