@@ -143,12 +143,16 @@ export default function Home({ jobs, error }) {
                     padding: 10px;
                     margin-top: 10px;
                     margin-bottom: 40px;
+                    border-radius: 25px; /* Rounded corners */
+                    outline: none;
+                    border: 2px solid #2a1863; /* Outline in #2a1863 */
                 }
 
                 .table-section {
                     max-height: 400px; /* Fixed height for the section */
                     overflow: auto; /* Enable scrolling */
                     background: white;
+                    padding-bottom: 0; /* Remove bottom padding */
                 }
                 .table-container {
                     padding-top: 20px;
