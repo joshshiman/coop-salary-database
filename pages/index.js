@@ -70,9 +70,9 @@ export default function Home({ jobs, error }) {
                     <a href="https://uoftcoopsalary.pages.dev/">uoft</a>
                     <a href="https://docs.google.com/spreadsheets/d/1kMBu1_TONgzZ0Ysz3d2OYiu1O8kDftZxT3INxrz8hII/edit#gid=0">uw</a>
                 </div>
-                <Link href="https://docs.google.com/forms/d/e/1FAIpQLSeFOQ8luazEcVEuhHiIWwCsDe_XjQrVAfNW7vPleSP43ZFtyw/viewform?usp=sf_link">
-                    <button className="upload-button">Upload Salary</button>
-                </Link>
+                <button className="upload-button" onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSeFOQ8luazEcVEuhHiIWwCsDe_XjQrVAfNW7vPleSP43ZFtyw/viewform?usp=sf_link', '_blank')}>
+                    Upload Salary
+                </button>
             </nav>
             <div className="hero">
                 <h1>WLU Co-op Salary</h1>
