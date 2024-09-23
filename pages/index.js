@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Link from 'next/link';
+import Head from 'next/head';
 
 export async function getServerSideProps() {
     const url = `https://${process.env.VERCEL_URL}/api/jobs`;
@@ -64,6 +64,10 @@ export default function Home({ jobs, error }) {
 
     return (
         <div className="container">
+            <Head>
+                <title>WLU Co-op Salary Database</title>
+                <link rel="icon" href="/logo.png" />
+            </Head>
             <nav className="navbar">
                 <img src="/logo.png" alt="Logo" className="logo" />
                 <div className="schools">
