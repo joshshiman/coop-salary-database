@@ -88,6 +88,7 @@ export default function Home({ jobs, error }) {
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="search-input"
                 />
+                <p><i>Click on the headers to sort, and notes to clear</i></p>
             </div>
             {error ? (
                 <p>Error: {error}</p>
