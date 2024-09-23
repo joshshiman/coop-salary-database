@@ -65,7 +65,7 @@ export default function Home({ jobs, error }) {
     return (
         <div className="container">
             <Head>
-                <title>WLU Co-op Salary Database</title>
+                <title>💼 Co-op Salary Database</title>
                 <link rel="icon" href="/logo.png" />
             </Head>
             <nav className="navbar">
@@ -75,20 +75,21 @@ export default function Home({ jobs, error }) {
                     <a href="https://docs.google.com/spreadsheets/d/1kMBu1_TONgzZ0Ysz3d2OYiu1O8kDftZxT3INxrz8hII/edit#gid=0">uw</a>
                 </div>
                 <button className="upload-button" onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSeFOQ8luazEcVEuhHiIWwCsDe_XjQrVAfNW7vPleSP43ZFtyw/viewform?usp=sf_link', '_blank')}>
-                    Upload Salary
+                    📤 Upload Salary
                 </button>
             </nav>
             <div className="hero">
-                <h1>WLU Co-op Salary</h1>
-                <p>Employees in Ontario have the right to discuss their salaries based on both the Pay Transparency Act and the Employment Standards Act</p>
+                <h1>🍁 WLU Co-op Salary</h1>
+                <p>Employees in Ontario have the right to discuss their salaries based on the Employment Standards Act</p>
                 <input
                     type="text"
-                    placeholder="Search jobs..."
+                    placeholder="🔍 Search jobs..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="search-input"
                 />
-                <p><i>Click on the headers to sort, and notes to clear</i></p>
+                <br></br>
+                <small><i>Click on the headers to sort, and notes to clear</i></small>
             </div>
             {error ? (
                 <p>Error: {error}</p>
@@ -195,7 +196,10 @@ export default function Home({ jobs, error }) {
                     border-radius: 30px;
                     cursor: pointer;
                 }
-
+                .upload-button:hover {
+                    background-color: #3b2799; /* A lighter shade on hover */
+                    transform: scale(1.05); /* Slight zoom effect on hover */
+                }
                 .hero {
                     text-align: center;
                     margin: 40px 0;
