@@ -1,21 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Head from "next/head";
+import Image from "next/image";
 
-/**
- * Redesigned responsive frontend for the Co-op Salary Database
- *
- * Features:
- * - Server-side fetch of /api/jobs with robust error handling
- * - Search (debounced), filters (program, location), and salary range slider
- * - Sort (including numeric sort for salary, date parsing for start date)
- * - Pagination with page-size control
- * - Export visible set to CSV
- * - Responsive: table for wide screens, card list for narrow screens
- * - Row details (expand) with permalink and copy-to-clipboard
- * - Accessible controls and minimalistic, modern styling via styled-jsx
- */
-
-/* Server-side fetch to keep the dataset fresh on each request */
 export async function getServerSideProps() {
   const base =
     typeof process.env.VERCEL_URL === "string" &&
@@ -35,7 +21,6 @@ export async function getServerSideProps() {
 
     return { props: { jobs } };
   } catch (err) {
-    // Provide empty data and error message to the page
     return { props: { jobs: [], error: err.message || "Unknown error" } };
   }
 }
@@ -270,20 +255,19 @@ export default function Home({ jobs = [], error }) {
     if (!debouncedQuery) return text;
     const q = debouncedQuery.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
     const regex = new RegExp(`(${q})`, "ig");
-    return text.split(regex).map((part, idx) =>
-      regex.test(part) ? (
-        <mark key={idx} className="highlight">
-          {part}
-        </mark>
-      ) : (
-        <span key={idx}>{part}</span>
-      ),
-    );
+    return text
+      .split(regex)
+      .map((part, idx) =>
+        regex.test(part) ? (
+          <mark key={idx}>{part}</mark>
+        ) : (
+          <span key={idx}>{part}</span>
+        ),
+      );
   };
 
-  /* Render */
   return (
-    <div className="page-root">
+    <div className="container-fluid bg-dark text-light min-vh-100">
       <Head>
         <title>Co-op Salary Database — WLU</title>
         <meta
@@ -292,860 +276,315 @@ export default function Home({ jobs = [], error }) {
         />
       </Head>
 
-      <header className="header">
-        <div className="brand">
-          <img src="/logo.png" alt="Co-op salary logo" />
-          <div>
-            <h1>WLU Co-op Salary</h1>
-            <p className="tagline">
-              Community-driven, searchable co-op salary & placement database
-            </p>
+      <nav className="navbar navbar-expand-lg navbar-dark bg-darker">
+        <div className="container">
+          <a className="navbar-brand" href="#">
+            <Image
+              src="/logo.png"
+              alt="Co-op salary logo"
+              width={40}
+              height={40}
+              className="d-inline-block align-text-top me-2"
+            />
+            WLU Co-op Salary
+          </a>
+          <div className="d-flex">
+            <button
+              className="btn btn-outline-light me-2"
+              onClick={() =>
+                window.open(
+                  "https://docs.google.com/forms/d/e/1FAIpQLSeFOQ8luazEcVEuhHiIWwCsDe_XjQrVAfNW7vPleSP43ZFtyw/viewform?usp=sf_link",
+                  "_blank",
+                )
+              }
+            >
+              📤 Upload Salary
+            </button>
+            <button
+              className="btn btn-light"
+              onClick={() => exportVisibleCSV()}
+              aria-label="Export visible results to CSV"
+            >
+              ⤓ Export CSV
+            </button>
           </div>
         </div>
+      </nav>
 
-        <div className="actions">
-          <button
-            className="btn ghost"
-            onClick={() =>
-              window.open(
-                "https://docs.google.com/forms/d/e/1FAIpQLSeFOQ8luazEcVEuhHiIWwCsDe_XjQrVAfNW7vPleSP43ZFtyw/viewform?usp=sf_link",
-                "_blank",
-              )
-            }
-          >
-            📤 Upload Salary
-          </button>
-          <button
-            className="btn"
-            onClick={() => exportVisibleCSV()}
-            aria-label="Export visible results to CSV"
-          >
-            ⤓ Export CSV
-          </button>
-        </div>
-      </header>
-
-      <main className="content">
+      <main className="container mt-4">
         {error ? (
-          <div className="error">Error loading data: {error}</div>
+          <div className="alert alert-danger">Error loading data: {error}</div>
         ) : (
           <>
-            <section className="controls" aria-label="Search and filters">
-              <div className="search">
-                <label htmlFor="q">🔎 Search</label>
-                <input
-                  id="q"
-                  type="search"
-                  value={query}
-                  placeholder="Role, company, notes, location..."
-                  onChange={(e) => {
-                    setQuery(e.target.value);
-                    setPage(1);
-                  }}
-                />
-              </div>
-
-              <div className="filter-row">
-                <div className="filter">
-                  <label htmlFor="program">Program</label>
-                  <select
-                    id="program"
-                    value={programFilter}
-                    onChange={(e) => {
-                      setProgramFilter(e.target.value);
-                      setPage(1);
-                    }}
-                  >
-                    {programs.map((p) => (
-                      <option key={p} value={p}>
-                        {p}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="filter">
-                  <label htmlFor="location">Location</label>
-                  <select
-                    id="location"
-                    value={locationFilter}
-                    onChange={(e) => {
-                      setLocationFilter(e.target.value);
-                      setPage(1);
-                    }}
-                  >
-                    {locations.map((l) => (
-                      <option key={l} value={l}>
-                        {l}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="filter salary-filter" aria-hidden={false}>
-                  <label>Salary range (CAD/hr)</label>
-                  <div className="salary-inputs">
+            <div className="card bg-darker mb-4">
+              <div className="card-body">
+                <div className="row g-3">
+                  <div className="col-lg-12">
+                    <label htmlFor="q" className="form-label">
+                      Search
+                    </label>
                     <input
-                      name="min"
-                      type="number"
-                      value={activeSalaryFilter[0]}
-                      onChange={onSalarySliderChange}
-                    />
-                    <span>—</span>
-                    <input
-                      name="max"
-                      type="number"
-                      value={activeSalaryFilter[1]}
-                      onChange={onSalarySliderChange}
+                      id="q"
+                      type="search"
+                      className="form-control form-control-lg bg-dark text-light"
+                      value={query}
+                      placeholder="Role, company, notes, location..."
+                      onChange={(e) => {
+                        setQuery(e.target.value);
+                        setPage(1);
+                      }}
                     />
                   </div>
-                  <div className="salary-hint">
-                    Detected: {salaryRange[0]} — {salaryRange[1]}
+                  <div className="col-md-4">
+                    <label htmlFor="program" className="form-label">
+                      Program
+                    </label>
+                    <select
+                      id="program"
+                      className="form-select bg-dark text-light"
+                      value={programFilter}
+                      onChange={(e) => {
+                        setProgramFilter(e.target.value);
+                        setPage(1);
+                      }}
+                    >
+                      {programs.map((p) => (
+                        <option key={p} value={p}>
+                          {p}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                </div>
-              </div>
-
-              <div className="controls-bottom">
-                <div className="pager-controls">
-                  <label>Sort</label>
-                  <div
-                    className="sort-buttons"
-                    role="tablist"
-                    aria-label="Sort options"
-                  >
+                  <div className="col-md-4">
+                    <label htmlFor="location" className="form-label">
+                      Location
+                    </label>
+                    <select
+                      id="location"
+                      className="form-select bg-dark text-light"
+                      value={locationFilter}
+                      onChange={(e) => {
+                        setLocationFilter(e.target.value);
+                        setPage(1);
+                      }}
+                    >
+                      {locations.map((l) => (
+                        <option key={l} value={l}>
+                          {l}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="col-md-4">
+                    <label className="form-label">Salary range (CAD/hr)</label>
+                    <div className="input-group">
+                      <input
+                        name="min"
+                        type="number"
+                        className="form-control bg-dark text-light"
+                        value={activeSalaryFilter[0]}
+                        onChange={onSalarySliderChange}
+                      />
+                      <span className="input-group-text bg-dark text-light">
+                        –
+                      </span>
+                      <input
+                        name="max"
+                        type="number"
+                        className="form-control bg-dark text-light"
+                        value={activeSalaryFilter[1]}
+                        onChange={onSalarySliderChange}
+                      />
+                    </div>
+                    <div className="form-text">
+                      Detected: {salaryRange[0]} – {salaryRange[1]}
+                    </div>
+                  </div>
+                  <div className="col-12 d-flex justify-content-between align-items-center">
+                    <div>
+                      <strong>{total}</strong> results
+                    </div>
                     <button
-                      className={`pill ${sortKey === "role" ? "active" : ""}`}
+                      className="btn btn-outline-secondary"
+                      onClick={clearFilters}
+                    >
+                      Clear Filters
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="d-none d-lg-block">
+              <table className="table table-dark table-hover">
+                <thead>
+                  <tr>
+                    <th
                       onClick={() => toggleSort("role")}
+                      className="cursor-pointer"
                     >
                       Role{" "}
-                      {sortKey === "role"
-                        ? sortDir === "asc"
-                          ? "↑"
-                          : "↓"
-                        : ""}
-                    </button>
-                    <button
-                      className={`pill ${sortKey === "company" ? "active" : ""}`}
+                      {sortKey === "role" && (sortDir === "asc" ? "↑" : "↓")}
+                    </th>
+                    <th
                       onClick={() => toggleSort("company")}
+                      className="cursor-pointer"
                     >
                       Company{" "}
-                      {sortKey === "company"
-                        ? sortDir === "asc"
-                          ? "↑"
-                          : "↓"
-                        : ""}
-                    </button>
-                    <button
-                      className={`pill ${sortKey === "salary" ? "active" : ""}`}
+                      {sortKey === "company" && (sortDir === "asc" ? "↑" : "↓")}
+                    </th>
+                    <th
                       onClick={() => toggleSort("salary")}
+                      className="cursor-pointer"
                     >
                       Salary{" "}
-                      {sortKey === "salary"
-                        ? sortDir === "asc"
-                          ? "↑"
-                          : "↓"
-                        : ""}
-                    </button>
-                    <button
-                      className={`pill ${sortKey === "start_date" ? "active" : ""}`}
+                      {sortKey === "salary" && (sortDir === "asc" ? "↑" : "↓")}
+                    </th>
+                    <th
+                      onClick={() => toggleSort("location")}
+                      className="cursor-pointer"
+                    >
+                      Location{" "}
+                      {sortKey === "location" &&
+                        (sortDir === "asc" ? "↑" : "↓")}
+                    </th>
+                    <th
                       onClick={() => toggleSort("start_date")}
+                      className="cursor-pointer"
                     >
                       Start Date{" "}
-                      {sortKey === "start_date"
-                        ? sortDir === "asc"
-                          ? "↑"
-                          : "↓"
-                        : ""}
+                      {sortKey === "start_date" &&
+                        (sortDir === "asc" ? "↑" : "↓")}
+                    </th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pageItems.map((job) => (
+                    <tr key={job.id}>
+                      <td>{highlight(job.role || "N/A")}</td>
+                      <td>{highlight(job.company || "N/A")}</td>
+                      <td>{job.salary ? `$${job.salary} / hr` : "N/A"}</td>
+                      <td>{highlight(job.location || "N/A")}</td>
+                      <td>{formatDate(job.start_date)}</td>
+                      <td>
+                        {job.notes ? (
+                          <span title={job.notes}>
+                            {job.notes.slice(0, 60)}
+                            {job.notes.length > 60 ? "…" : ""}
+                          </span>
+                        ) : (
+                          "N/A"
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="d-lg-none">
+              {pageItems.map((job) => (
+                <div key={job.id} className="card bg-darker mb-3">
+                  <div className="card-body">
+                    <div className="d-flex justify-content-between">
+                      <h5 className="card-title">
+                        {highlight(job.role || "N/A")}
+                      </h5>
+                      <h5 className="text-light">
+                        {job.salary ? `$${job.salary}/hr` : "N/A"}
+                      </h5>
+                    </div>
+                    <h6 className="card-subtitle mb-2 text-muted">
+                      {highlight(job.company || "N/A")}
+                    </h6>
+                    <p className="card-text">
+                      {highlight(job.location || "N/A")} • {job.program} •{" "}
+                      {formatDate(job.start_date)}
+                    </p>
+                    <p className="card-text">
+                      {job.notes ? (
+                        <>
+                          {job.notes.slice(0, 140)}
+                          {job.notes.length > 140 && "…"}
+                        </>
+                      ) : (
+                        <span className="text-muted">No notes</span>
+                      )}
+                    </p>
+                    <button
+                      className="btn btn-sm btn-outline-light"
+                      onClick={() => copyPermalink(job.id)}
+                    >
+                      🔗 Permalink
                     </button>
                   </div>
                 </div>
+              ))}
+            </div>
 
-                <div className="pager-controls">
-                  <label>Page size</label>
-                  <select
-                    value={pageSize}
-                    onChange={(e) => {
-                      setPageSize(Number(e.target.value));
-                      setPage(1);
-                    }}
+            {pageItems.length === 0 && (
+              <div className="text-center p-5">
+                <h3>No results found</h3>
+                <p>Try adjusting your filters.</p>
+              </div>
+            )}
+
+            <nav
+              aria-label="Pagination"
+              className="d-flex justify-content-center mt-4"
+            >
+              <ul className="pagination">
+                <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
+                  <a className="page-link" href="#" onClick={() => setPage(1)}>
+                    « First
+                  </a>
+                </li>
+                <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
+                  <a
+                    className="page-link"
+                    href="#"
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
                   >
-                    {[10, 20, 50, 100].map((n) => (
-                      <option key={n} value={n}>
-                        {n}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="pager-controls">
-                  <label>Results</label>
-                  <div className="result-count">{total} matches</div>
-                </div>
-
-                <div className="spacer" />
-
-                <div>
-                  <button className="btn ghost" onClick={clearFilters}>
-                    Clear
-                  </button>
-                </div>
-              </div>
-            </section>
-
-            <section className="list-area" aria-live="polite">
-              {/* Responsive: table on wide screens, cards on narrow screens */}
-              <div
-                className="desktop-table"
-                role="table"
-                aria-label="Salary results"
-              >
-                <div className="thead" role="rowgroup">
-                  <div className="tr header-row" role="row">
-                    <div
-                      className="th col-role"
-                      role="columnheader"
-                      onClick={() => toggleSort("role")}
-                    >
-                      Role
-                    </div>
-                    <div
-                      className="th col-company"
-                      role="columnheader"
-                      onClick={() => toggleSort("company")}
-                    >
-                      Company
-                    </div>
-                    <div
-                      className="th col-salary"
-                      role="columnheader"
-                      onClick={() => toggleSort("salary")}
-                    >
-                      Salary
-                    </div>
-                    <div
-                      className="th col-location"
-                      role="columnheader"
-                      onClick={() => toggleSort("location")}
-                    >
-                      Location
-                    </div>
-                    <div
-                      className="th col-start"
-                      role="columnheader"
-                      onClick={() => toggleSort("start_date")}
-                    >
-                      Start
-                    </div>
-                    <div className="th col-duration" role="columnheader">
-                      Duration
-                    </div>
-                    <div className="th col-program" role="columnheader">
-                      Program
-                    </div>
-                    <div className="th col-notes" role="columnheader">
-                      Notes
-                    </div>
-                  </div>
-                </div>
-
-                <div className="tbody" role="rowgroup">
-                  {pageItems.length === 0 ? (
-                    <div className="tr empty" role="row">
-                      <div className="td" role="cell">
-                        No results found.
-                      </div>
-                    </div>
-                  ) : (
-                    pageItems.map((job) => (
-                      <div
-                        key={job.id}
-                        className={`tr ${expandedId === job.id ? "expanded" : ""}`}
-                        role="row"
-                        onClick={() =>
-                          setExpandedId(expandedId === job.id ? null : job.id)
-                        }
-                        tabIndex={0}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter")
-                            setExpandedId(
-                              expandedId === job.id ? null : job.id,
-                            );
-                        }}
-                      >
-                        <div className="td col-role" role="cell">
-                          {job.role || "N/A"}
-                        </div>
-                        <div className="td col-company" role="cell">
-                          {job.company || "N/A"}
-                        </div>
-                        <div className="td col-salary" role="cell">
-                          {job.salary ? `$${job.salary} / hr` : "N/A"}
-                        </div>
-                        <div className="td col-location" role="cell">
-                          {job.location || "N/A"}
-                        </div>
-                        <div className="td col-start" role="cell">
-                          {formatDate(job.start_date)}
-                        </div>
-                        <div className="td col-duration" role="cell">
-                          {job.duration || "N/A"}
-                        </div>
-                        <div className="td col-program" role="cell">
-                          {job.program || "N/A"}
-                        </div>
-                        <div className="td col-notes" role="cell">
-                          {job.notes ? (
-                            <span className="notes-snippet">
-                              {job.notes.slice(0, 60)}
-                              {job.notes.length > 60 ? "…" : ""}
-                            </span>
-                          ) : (
-                            "N/A"
-                          )}
-                        </div>
-
-                        {expandedId === job.id && (
-                          <div
-                            className="expanded-panel"
-                            role="region"
-                            aria-live="polite"
-                          >
-                            <div className="panel-row">
-                              <div>
-                                <strong>Notes:</strong>
-                              </div>
-                              <div className="notes">{job.notes || "N/A"}</div>
-                            </div>
-                            <div className="panel-row">
-                              <div>
-                                <strong>Details:</strong>
-                              </div>
-                              <div className="detail-grid">
-                                <div>
-                                  <strong>Role:</strong> {job.role}
-                                </div>
-                                <div>
-                                  <strong>Company:</strong> {job.company}
-                                </div>
-                                <div>
-                                  <strong>Salary:</strong>{" "}
-                                  {job.salary ? `$${job.salary} / hr` : "N/A"}
-                                </div>
-                                <div>
-                                  <strong>Location:</strong> {job.location}
-                                </div>
-                                <div>
-                                  <strong>Start:</strong>{" "}
-                                  {formatDate(job.start_date)}
-                                </div>
-                                <div>
-                                  <strong>Duration:</strong> {job.duration}
-                                </div>
-                                <div>
-                                  <strong>Program:</strong> {job.program}
-                                </div>
-                              </div>
-                            </div>
-                            <div className="panel-actions">
-                              <button
-                                className="btn"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  copyPermalink(job.id);
-                                }}
-                              >
-                                🔗 Copy Permalink
-                              </button>
-                              <button
-                                className="btn ghost"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  navigator.clipboard?.writeText(
-                                    JSON.stringify(job),
-                                  );
-                                }}
-                              >
-                                📋 Copy JSON
-                              </button>
-                              <a
-                                className="btn ghost"
-                                href={`mailto:?subject=Co-op salary&body=${encodeURIComponent(JSON.stringify(job, null, 2))}`}
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                ✉️ Share
-                              </a>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-
-              {/* Mobile list */}
-              <div className="mobile-list" aria-hidden={false}>
-                {pageItems.length === 0 ? (
-                  <div className="card empty">No results</div>
-                ) : (
-                  pageItems.map((job) => (
-                    <article key={job.id} className="card">
-                      <div className="card-top">
-                        <div className="card-role">{job.role || "N/A"}</div>
-                        <div className="card-salary">
-                          {job.salary ? `$${job.salary}/hr` : "N/A"}
-                        </div>
-                      </div>
-                      <div className="card-mid">
-                        <div className="company">{job.company}</div>
-                        <div className="meta">
-                          {job.location} • {job.program} •{" "}
-                          {formatDate(job.start_date)}
-                        </div>
-                      </div>
-                      <div className="card-bottom">
-                        <div className="notes">
-                          {job.notes
-                            ? job.notes.slice(0, 140) +
-                              (job.notes.length > 140 ? "…" : "")
-                            : "No notes"}
-                        </div>
-                        <div className="card-actions">
-                          <button
-                            className="btn"
-                            onClick={() =>
-                              setExpandedId(
-                                expandedId === job.id ? null : job.id,
-                              )
-                            }
-                          >
-                            Details
-                          </button>
-                          <button
-                            className="btn ghost"
-                            onClick={() => copyPermalink(job.id)}
-                          >
-                            Permalink
-                          </button>
-                        </div>
-                        {expandedId === job.id && (
-                          <div className="card-expanded">
-                            <pre>{job.notes || "No notes"}</pre>
-                          </div>
-                        )}
-                      </div>
-                    </article>
-                  ))
-                )}
-              </div>
-            </section>
-
-            <nav className="pagination" aria-label="Pagination">
-              <div className="page-actions">
-                <button
-                  className="btn ghost"
-                  onClick={() => setPage(1)}
-                  disabled={page === 1}
+                    ‹ Prev
+                  </a>
+                </li>
+                <li className="page-item disabled">
+                  <a className="page-link" href="#">
+                    Page {page} / {totalPages}
+                  </a>
+                </li>
+                <li
+                  className={`page-item ${page === totalPages ? "disabled" : ""}`}
                 >
-                  « First
-                </button>
-                <button
-                  className="btn ghost"
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
+                  <a
+                    className="page-link"
+                    href="#"
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  >
+                    Next ›
+                  </a>
+                </li>
+                <li
+                  className={`page-item ${page === totalPages ? "disabled" : ""}`}
                 >
-                  ‹ Prev
-                </button>
-                <span className="page-info">
-                  Page {page} / {totalPages}
-                </span>
-                <button
-                  className="btn ghost"
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={page === totalPages}
-                >
-                  Next ›
-                </button>
-                <button
-                  className="btn ghost"
-                  onClick={() => setPage(totalPages)}
-                  disabled={page === totalPages}
-                >
-                  Last »
-                </button>
-              </div>
+                  <a
+                    className="page-link"
+                    href="#"
+                    onClick={() => setPage(totalPages)}
+                  >
+                    Last »
+                  </a>
+                </li>
+              </ul>
             </nav>
           </>
         )}
       </main>
 
-      <footer className="footer">
-        <div>
-          Community-submitted — use responsibly. Contact the maintainers for
-          corrections.
-        </div>
+      <footer className="text-center text-muted py-4">
+        <small>Community-submitted — use responsibly.</small>
       </footer>
-
-      <style jsx>{`
-        :global(html, body, #__next) {
-          height: 100%;
-        }
-        .page-root {
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-          background: linear-gradient(180deg, #f7f6fb 0%, #ffffff 100%);
-          color: #111;
-          font-family:
-            Inter,
-            ui-sans-serif,
-            system-ui,
-            -apple-system,
-            "Segoe UI",
-            Roboto,
-            "Helvetica Neue",
-            Arial;
-        }
-        .header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 16px;
-          padding: 18px 20px;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-          background: white;
-          position: sticky;
-          top: 0;
-          z-index: 30;
-        }
-        .brand {
-          display: flex;
-          gap: 12px;
-          align-items: center;
-        }
-        .brand img {
-          height: 48px;
-          width: 48px;
-          object-fit: contain;
-          border-radius: 8px;
-        }
-        .brand h1 {
-          margin: 0;
-          font-size: 1.1rem;
-        }
-        .tagline {
-          margin: 0;
-          font-size: 0.85rem;
-          color: #666;
-        }
-
-        .actions {
-          display: flex;
-          gap: 8px;
-          align-items: center;
-        }
-        .btn {
-          background: #2a1863;
-          color: white;
-          border: none;
-          padding: 8px 12px;
-          border-radius: 8px;
-          cursor: pointer;
-          font-weight: 600;
-        }
-        .btn.ghost {
-          background: transparent;
-          border: 1px solid rgba(0, 0, 0, 0.08);
-          color: #2a1863;
-        }
-
-        .content {
-          width: 100%;
-          max-width: 1200px;
-          margin: 18px auto;
-          padding: 0 18px 80px;
-          flex: 1 0 auto;
-        }
-
-        .controls {
-          background: white;
-          padding: 18px;
-          border-radius: 12px;
-          box-shadow: 0 6px 18px rgba(12, 13, 21, 0.04);
-          margin-bottom: 16px;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-        /* Search row - label + input aligned and responsive */
-        .search {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          width: 100%;
-        }
-        .search label {
-          font-weight: 600;
-          color: #222;
-          white-space: nowrap;
-        }
-        .search input[type="search"] {
-          flex: 1;
-          min-width: 220px;
-          max-width: 720px;
-          padding: 10px 12px;
-          border-radius: 10px;
-          border: 1px solid #e6e6ea;
-          box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.02);
-          font-size: 0.95rem;
-        }
-        .filter-row {
-          display: flex;
-          gap: 12px;
-          margin-top: 6px;
-          flex-wrap: wrap;
-          align-items: center;
-        }
-        .filter {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-          min-width: 140px;
-        }
-        .filter select,
-        .filter input[type="number"] {
-          padding: 8px 10px;
-          border-radius: 8px;
-          border: 1px solid #e6e6ea;
-          background: #fff;
-        }
-        .salary-inputs {
-          display: flex;
-          gap: 8px;
-          align-items: center;
-        }
-        .salary-inputs input[type="number"] {
-          width: 100px;
-          padding: 8px 10px;
-          border-radius: 8px;
-          border: 1px solid #e6e6ea;
-        }
-        .salary-inputs span {
-          color: #666;
-          padding: 0 6px;
-        }
-        .salary-hint {
-          font-size: 0.78rem;
-          color: #666;
-          margin-top: 6px;
-        }
-
-        .controls-bottom {
-          display: flex;
-          gap: 12px;
-          align-items: center;
-          margin-top: 12px;
-          flex-wrap: wrap;
-          justify-content: space-between;
-        }
-        .controls-bottom .pager-controls {
-          display: flex;
-          gap: 8px;
-          align-items: center;
-        }
-        .controls-bottom .spacer {
-          flex: 1 1 auto;
-        }
-        .pill {
-          padding: 6px 10px;
-          border-radius: 999px;
-          background: #f3f2f8;
-          border: none;
-          cursor: pointer;
-        }
-        .pill.active {
-          background: #2a1863;
-          color: white;
-        }
-
-        .list-area {
-          display: block;
-        }
-
-        /* Table */
-        .desktop-table {
-          display: block;
-          background: white;
-          border-radius: 12px;
-          overflow: hidden;
-          box-shadow: 0 10px 30px rgba(16, 18, 20, 0.04);
-        }
-        .thead {
-          background: #f8f8fb;
-          border-bottom: 1px solid #eee;
-        }
-        .tr {
-          display: grid;
-          grid-template-columns: 2fr 1.6fr 1fr 1fr 0.9fr 0.8fr 0.9fr 1.8fr;
-          gap: 0;
-          align-items: center;
-          padding: 10px 12px;
-          cursor: pointer;
-        }
-        .header-row {
-          font-weight: 600;
-          font-size: 0.9rem;
-          cursor: default;
-        }
-        .tr:not(.header-row):hover {
-          background: #fbfbff;
-        }
-        .td {
-          padding: 8px 12px;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-        }
-        .empty .td {
-          grid-column: 1 / -1;
-          padding: 28px;
-          text-align: center;
-          color: #666;
-        }
-        .notes-snippet {
-          color: #444;
-          font-size: 0.9rem;
-        }
-
-        .expanded-panel {
-          grid-column: 1 / -1;
-          padding: 12px;
-          background: #fafafa;
-          border-top: 1px dashed rgba(0, 0, 0, 0.06);
-        }
-        .panel-row {
-          display: flex;
-          gap: 12px;
-          margin-bottom: 8px;
-        }
-        .detail-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 8px;
-        }
-        .panel-actions {
-          display: flex;
-          gap: 8px;
-          margin-top: 8px;
-        }
-
-        /* Mobile cards */
-        .mobile-list {
-          display: none;
-        }
-        .card {
-          background: white;
-          padding: 12px;
-          border-radius: 10px;
-          margin-bottom: 10px;
-          box-shadow: 0 6px 18px rgba(12, 13, 21, 0.04);
-        }
-        .card-top {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 8px;
-        }
-        .card-role {
-          font-weight: 700;
-        }
-        .card-salary {
-          color: #2a1863;
-          font-weight: 700;
-        }
-        .card-mid .company {
-          font-weight: 600;
-        }
-        .card-mid .meta {
-          color: #666;
-          font-size: 0.9rem;
-        }
-        .card-bottom .notes {
-          margin-top: 8px;
-          color: #444;
-        }
-        .card-actions {
-          display: flex;
-          gap: 8px;
-          margin-top: 8px;
-        }
-
-        .pagination {
-          display: flex;
-          justify-content: center;
-          margin-top: 16px;
-          gap: 8px;
-        }
-        .page-actions {
-          display: flex;
-          gap: 8px;
-          align-items: center;
-          flex-wrap: wrap;
-        }
-
-        .footer {
-          padding: 18px;
-          text-align: center;
-          color: #666;
-          font-size: 0.9rem;
-          background: transparent;
-        }
-
-        .error {
-          color: #7a1723;
-          background: #fff1f1;
-          padding: 12px;
-          border-radius: 8px;
-        }
-
-        .highlight {
-          background: #fff3a0;
-          padding: 0 2px;
-          border-radius: 3px;
-        }
-
-        /* Responsive breakpoints */
-        @media (max-width: 900px) {
-          .desktop-table {
-            display: none;
-          }
-          .mobile-list {
-            display: block;
-          }
-          .filter-row {
-            gap: 8px;
-          }
-          .controls-bottom {
-            gap: 8px;
-          }
-          .brand h1 {
-            font-size: 1rem;
-          }
-        }
-
-        @media (max-width: 600px) {
-          .header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 12px;
-          }
-          .actions {
-            width: 100%;
-            justify-content: space-between;
-          }
-          .search input {
-            width: 100%;
-          }
-        }
-      `}</style>
     </div>
   );
 }
