@@ -1,9 +1,21 @@
 :root {
+    --background: #ffffff;
+    --ui-elements: #f8f9fa;
+    --text-color: #212529;
+    --accent-color: #38b2ac;
+    --border-color: #dee2e6;
+    --card-bg: #ffffff;
+    --navbar-bg: #f8f9fa;
+}
+
+[data-theme="dark"] {
     --background: #1a202c;
     --ui-elements: #2d3748;
     --text-color: #e2e8f0;
     --accent-color: #38b2ac;
     --border-color: #4a5568;
+    --card-bg: #2d3748;
+    --navbar-bg: #2d3748;
 }
 
 html,
@@ -11,6 +23,7 @@ body {
     padding: 0;
     margin: 0;
     font-family:
+        "Montserrat",
         -apple-system,
         BlinkMacSystemFont,
         Segoe UI,
@@ -24,6 +37,9 @@ body {
         sans-serif;
     background-color: var(--background) !important;
     color: var(--text-color);
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
 }
 
 a {
@@ -35,8 +51,24 @@ a {
     box-sizing: border-box;
 }
 
+.logo-font {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
 .bg-darker {
     background-color: var(--ui-elements) !important;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+}
+
+.navbar {
+    background-color: var(--navbar-bg) !important;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .table {
@@ -46,16 +78,24 @@ a {
     --bs-table-hover-bg: #374151;
 }
 
+[data-theme="light"] .table {
+    --bs-table-hover-bg: #f1f5f9;
+}
+
 .form-control,
 .form-select {
-    background-color: var(--ui-elements) !important;
+    background-color: var(--background) !important;
     color: var(--text-color) !important;
     border-color: var(--border-color) !important;
 }
 
+.form-control::placeholder {
+    color: #a0aec0;
+}
+
 .form-control:focus,
 .form-select:focus {
-    background-color: var(--ui-elements);
+    background-color: var(--background);
     color: var(--text-color);
     border-color: var(--accent-color);
     box-shadow: 0 0 0 0.25rem rgba(56, 178, 172, 0.25);
@@ -72,8 +112,11 @@ a {
 }
 
 .page-link:hover {
+    background-color: #e2e8f0;
+}
+
+[data-theme="dark"] .page-link:hover {
     background-color: #374151;
-    color: var(--text-color);
 }
 
 .page-item.disabled .page-link {
@@ -124,5 +167,18 @@ mark {
 .input-group-text {
     background-color: var(--ui-elements) !important;
     border-color: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+.form-label,
+.form-text,
+h5,
+h3,
+p,
+strong {
+    color: var(--text-color) !important;
+}
+
+.navbar-brand {
     color: var(--text-color) !important;
 }

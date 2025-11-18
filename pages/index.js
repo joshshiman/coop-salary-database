@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
+import { useTheme } from "../context/ThemeContext";
 
 export async function getServerSideProps() {
   const base =
@@ -49,13 +50,14 @@ const formatDate = (s) => {
 };
 
 export default function Home({ jobs = [], error }) {
+  const { theme, toggleTheme } = useTheme();
   // UI state
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [sortKey, setSortKey] = useState("start_date");
   const [sortDir, setSortDir] = useState("desc"); // 'asc' | 'desc'
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(50);
   const [expandedId, setExpandedId] = useState(null);
   const [salaryRange, setSalaryRange] = useState([0, 0]); // [min,max]
   const [activeSalaryFilter, setActiveSalaryFilter] = useState([0, 0]); // applied
@@ -225,7 +227,7 @@ export default function Home({ jobs = [], error }) {
   };
 
   return (
-    <div className="container-fluid bg-dark text-light min-vh-100">
+    <div className="container-fluid min-vh-100">
       <Head>
         <title>Co-op Salary Database — WLU</title>
         <meta
@@ -234,9 +236,9 @@ export default function Home({ jobs = [], error }) {
         />
       </Head>
 
-      <nav className="navbar navbar-expand-lg navbar-dark bg-darker">
+      <nav className="navbar navbar-expand-lg">
         <div className="container">
-          <a className="navbar-brand" href="#">
+          <a className="navbar-brand logo-font" href="#">
             <Image
               src="/logo.png"
               alt="Co-op salary logo"
@@ -246,7 +248,7 @@ export default function Home({ jobs = [], error }) {
             />
             WLU Co-op Salary
           </a>
-          <div className="d-flex">
+          <div className="d-flex align-items-center">
             <button
               className="btn btn-outline-light me-2"
               onClick={() =>
@@ -258,6 +260,9 @@ export default function Home({ jobs = [], error }) {
             >
               📤 Upload Salary
             </button>
+            <button className="btn btn-outline-secondary" onClick={toggleTheme}>
+              {theme === "light" ? "🌙" : "☀️"}
+            </button>
           </div>
         </div>
       </nav>
@@ -267,7 +272,7 @@ export default function Home({ jobs = [], error }) {
           <div className="alert alert-danger">Error loading data: {error}</div>
         ) : (
           <>
-            <div className="card bg-darker mb-4">
+            <div className="card mb-4">
               <div className="card-body">
                 <div className="row g-3">
                   <div className="col-lg-12">
@@ -277,7 +282,7 @@ export default function Home({ jobs = [], error }) {
                     <input
                       id="q"
                       type="search"
-                      className="form-control form-control-lg bg-dark text-light"
+                      className="form-control form-control-lg"
                       value={query}
                       placeholder="Role, company, notes, location..."
                       onChange={(e) => {
@@ -292,7 +297,7 @@ export default function Home({ jobs = [], error }) {
                     </label>
                     <select
                       id="program"
-                      className="form-select bg-dark text-light"
+                      className="form-select"
                       value={programFilter}
                       onChange={(e) => {
                         setProgramFilter(e.target.value);
@@ -312,7 +317,7 @@ export default function Home({ jobs = [], error }) {
                     </label>
                     <select
                       id="location"
-                      className="form-select bg-dark text-light"
+                      className="form-select"
                       value={locationFilter}
                       onChange={(e) => {
                         setLocationFilter(e.target.value);
@@ -332,17 +337,15 @@ export default function Home({ jobs = [], error }) {
                       <input
                         name="min"
                         type="number"
-                        className="form-control bg-dark text-light"
+                        className="form-control"
                         value={activeSalaryFilter[0]}
                         onChange={onSalarySliderChange}
                       />
-                      <span className="input-group-text bg-dark text-light">
-                        –
-                      </span>
+                      <span className="input-group-text">–</span>
                       <input
                         name="max"
                         type="number"
-                        className="form-control bg-dark text-light"
+                        className="form-control"
                         value={activeSalaryFilter[1]}
                         onChange={onSalarySliderChange}
                       />
@@ -367,7 +370,7 @@ export default function Home({ jobs = [], error }) {
             </div>
 
             <div className="d-none d-lg-block">
-              <table className="table table-dark table-hover">
+              <table className="table table-hover">
                 <thead>
                   <tr>
                     <th
@@ -436,15 +439,13 @@ export default function Home({ jobs = [], error }) {
 
             <div className="d-lg-none">
               {pageItems.map((job) => (
-                <div key={job.id} className="card bg-darker mb-3">
+                <div key={job.id} className="card mb-3">
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
                       <h5 className="card-title">
                         {highlight(job.role || "N/A")}
                       </h5>
-                      <h5 className="text-light">
-                        {job.salary ? `$${job.salary}/hr` : "N/A"}
-                      </h5>
+                      <h5>{job.salary ? `$${job.salary}/hr` : "N/A"}</h5>
                     </div>
                     <h6 className="card-subtitle mb-2 text-muted">
                       {highlight(job.company || "N/A")}
