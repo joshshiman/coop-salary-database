@@ -48,32 +48,6 @@ const formatDate = (s) => {
   return d.toLocaleDateString();
 };
 
-const downloadCSV = (rows) => {
-  if (!rows || !rows.length) return;
-  const headers = Object.keys(rows[0]);
-  const csv = [headers.join(",")]
-    .concat(
-      rows.map((r) =>
-        headers
-          .map((h) => {
-            const v = r[h] == null ? "" : String(r[h]);
-            // Escape quotes
-            return `"${v.replace(/"/g, '""')}"`;
-          })
-          .join(","),
-      ),
-    )
-    .join("\n");
-
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "coop-salaries-export.csv";
-  a.click();
-  URL.revokeObjectURL(url);
-};
-
 export default function Home({ jobs = [], error }) {
   // UI state
   const [query, setQuery] = useState("");
@@ -221,22 +195,6 @@ export default function Home({ jobs = [], error }) {
     setSortDir("desc");
   };
 
-  const exportVisibleCSV = () => {
-    // export the currently visible (sorted & filtered) dataset (not paginated)
-    const exported = sorted.map((r) => ({
-      id: r.id,
-      role: r.role || "",
-      company: r.company || "",
-      salary: r.salary || "",
-      location: r.location || "",
-      start_date: r.start_date || "",
-      duration: r.duration || "",
-      program: r.program || "",
-      notes: (r.notes || "").replace(/\r?\n/g, " "),
-    }));
-    downloadCSV(exported);
-  };
-
   const copyPermalink = (id) => {
     const url = new URL(window.location.href);
     url.searchParams.set("id", id);
@@ -299,13 +257,6 @@ export default function Home({ jobs = [], error }) {
               }
             >
               📤 Upload Salary
-            </button>
-            <button
-              className="btn btn-light"
-              onClick={() => exportVisibleCSV()}
-              aria-label="Export visible results to CSV"
-            >
-              ⤓ Export CSV
             </button>
           </div>
         </div>
