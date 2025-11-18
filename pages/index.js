@@ -869,41 +869,70 @@ export default function Home({ jobs = [], error }) {
 
         .controls {
           background: white;
-          padding: 14px;
+          padding: 18px;
           border-radius: 12px;
           box-shadow: 0 6px 18px rgba(12, 13, 21, 0.04);
-          margin-bottom: 14px;
+          margin-bottom: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+        /* Search row - label + input aligned and responsive */
+        .search {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          width: 100%;
+        }
+        .search label {
+          font-weight: 600;
+          color: #222;
+          white-space: nowrap;
         }
         .search input[type="search"] {
-          width: 320px;
-          max-width: 100%;
-          padding: 8px 10px;
-          border-radius: 8px;
-          border: 1px solid #ddd;
+          flex: 1;
+          min-width: 220px;
+          max-width: 720px;
+          padding: 10px 12px;
+          border-radius: 10px;
+          border: 1px solid #e6e6ea;
+          box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.02);
+          font-size: 0.95rem;
         }
         .filter-row {
           display: flex;
           gap: 12px;
-          margin-top: 12px;
+          margin-top: 6px;
           flex-wrap: wrap;
-          align-items: end;
+          align-items: center;
         }
         .filter {
           display: flex;
           flex-direction: column;
           gap: 6px;
-          min-width: 160px;
+          min-width: 140px;
         }
         .filter select,
         .filter input[type="number"] {
-          padding: 8px;
+          padding: 8px 10px;
           border-radius: 8px;
-          border: 1px solid #ddd;
+          border: 1px solid #e6e6ea;
+          background: #fff;
         }
         .salary-inputs {
           display: flex;
           gap: 8px;
           align-items: center;
+        }
+        .salary-inputs input[type="number"] {
+          width: 100px;
+          padding: 8px 10px;
+          border-radius: 8px;
+          border: 1px solid #e6e6ea;
+        }
+        .salary-inputs span {
+          color: #666;
+          padding: 0 6px;
         }
         .salary-hint {
           font-size: 0.78rem;
@@ -917,6 +946,15 @@ export default function Home({ jobs = [], error }) {
           align-items: center;
           margin-top: 12px;
           flex-wrap: wrap;
+          justify-content: space-between;
+        }
+        .controls-bottom .pager-controls {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+        }
+        .controls-bottom .spacer {
+          flex: 1 1 auto;
         }
         .pill {
           padding: 6px 10px;
