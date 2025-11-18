@@ -377,38 +377,61 @@ export default function Home({ jobs = [], error }) {
                       onClick={() => toggleSort("role")}
                       className="cursor-pointer"
                     >
-                      Role{" "}
-                      {sortKey === "role" && (sortDir === "asc" ? "↑" : "↓")}
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span>Role</span>
+                        <span className="sort-arrow">
+                          {sortKey === "role" &&
+                            (sortDir === "asc" ? "↑" : "↓")}
+                        </span>
+                      </div>
                     </th>
                     <th
                       onClick={() => toggleSort("company")}
                       className="cursor-pointer"
                     >
-                      Company{" "}
-                      {sortKey === "company" && (sortDir === "asc" ? "↑" : "↓")}
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span>Company</span>
+                        <span className="sort-arrow">
+                          {sortKey === "company" &&
+                            (sortDir === "asc" ? "↑" : "↓")}
+                        </span>
+                      </div>
                     </th>
                     <th
                       onClick={() => toggleSort("salary")}
                       className="cursor-pointer"
                     >
-                      Salary{" "}
-                      {sortKey === "salary" && (sortDir === "asc" ? "↑" : "↓")}
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span>Salary</span>
+                        <span className="sort-arrow">
+                          {sortKey === "salary" &&
+                            (sortDir === "asc" ? "↑" : "↓")}
+                        </span>
+                      </div>
                     </th>
                     <th
                       onClick={() => toggleSort("location")}
                       className="cursor-pointer"
                     >
-                      Location{" "}
-                      {sortKey === "location" &&
-                        (sortDir === "asc" ? "↑" : "↓")}
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span>Location</span>
+                        <span className="sort-arrow">
+                          {sortKey === "location" &&
+                            (sortDir === "asc" ? "↑" : "↓")}
+                        </span>
+                      </div>
                     </th>
                     <th
                       onClick={() => toggleSort("start_date")}
                       className="cursor-pointer"
                     >
-                      Start Date{" "}
-                      {sortKey === "start_date" &&
-                        (sortDir === "asc" ? "↑" : "↓")}
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span>Start Date</span>
+                        <span className="sort-arrow">
+                          {sortKey === "start_date" &&
+                            (sortDir === "asc" ? "↑" : "↓")}
+                        </span>
+                      </div>
                     </th>
                     <th>Notes</th>
                   </tr>
@@ -464,12 +487,6 @@ export default function Home({ jobs = [], error }) {
                         <span className="text-muted">No notes</span>
                       )}
                     </p>
-                    <button
-                      className="btn btn-sm btn-outline-light"
-                      onClick={() => copyPermalink(job.id)}
-                    >
-                      🔗 Permalink
-                    </button>
                   </div>
                 </div>
               ))}

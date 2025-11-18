@@ -6,6 +6,8 @@
     --border-color: #dee2e6;
     --card-bg: #ffffff;
     --navbar-bg: #f8f9fa;
+    --mark-bg: #f0ad4e;
+    --mark-color: #000;
 }
 
 [data-theme="dark"] {
@@ -16,6 +18,8 @@
     --border-color: #4a5568;
     --card-bg: #2d3748;
     --navbar-bg: #2d3748;
+    --mark-bg: var(--accent-color);
+    --mark-color: var(--background);
 }
 
 html,
@@ -132,10 +136,10 @@ a {
 }
 
 mark {
-    background-color: var(--accent-color);
+    background-color: var(--mark-bg);
     padding: 0.2em;
     border-radius: 3px;
-    color: var(--background);
+    color: var(--mark-color);
 }
 
 .btn-outline-light {
@@ -181,4 +185,10 @@ strong {
 
 .navbar-brand {
     color: var(--text-color) !important;
+}
+
+.sort-arrow {
+    display: inline-block;
+    width: 1em;
+    text-align: left;
 }
