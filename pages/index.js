@@ -63,6 +63,7 @@ export default function Home({ jobs = [], error }) {
   const [activeSalaryFilter, setActiveSalaryFilter] = useState([0, 0]); // applied
   const [programFilter, setProgramFilter] = useState("all");
   const [locationFilter, setLocationFilter] = useState("all");
+  const [isSearchCollapsed, setIsSearchCollapsed] = useState(true);
 
   /* Debounce the query for 250ms */
   useEffect(() => {
@@ -273,223 +274,238 @@ export default function Home({ jobs = [], error }) {
         ) : (
           <>
             <div className="card mb-4">
-              <div className="card-body">
-                <div className="row g-3">
-                  <div className="col-lg-12">
-                    <label htmlFor="q" className="form-label">
-                      Search
-                    </label>
-                    <input
-                      id="q"
-                      type="search"
-                      className="form-control form-control-lg"
-                      value={query}
-                      placeholder="Role, company, notes, location..."
-                      onChange={(e) => {
-                        setQuery(e.target.value);
-                        setPage(1);
-                      }}
-                    />
-                  </div>
-                  <div className="col-md-4">
-                    <label htmlFor="program" className="form-label">
-                      Program
-                    </label>
-                    <select
-                      id="program"
-                      className="form-select"
-                      value={programFilter}
-                      onChange={(e) => {
-                        setProgramFilter(e.target.value);
-                        setPage(1);
-                      }}
-                    >
-                      {programs.map((p) => (
-                        <option key={p} value={p}>
-                          {p}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="col-md-4">
-                    <label htmlFor="location" className="form-label">
-                      Location
-                    </label>
-                    <select
-                      id="location"
-                      className="form-select"
-                      value={locationFilter}
-                      onChange={(e) => {
-                        setLocationFilter(e.target.value);
-                        setPage(1);
-                      }}
-                    >
-                      {locations.map((l) => (
-                        <option key={l} value={l}>
-                          {l}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="col-md-4">
-                    <label className="form-label">Salary range (CAD/hr)</label>
-                    <div className="input-group">
-                      <input
-                        name="min"
-                        type="number"
-                        className="form-control"
-                        value={activeSalaryFilter[0]}
-                        onChange={onSalarySliderChange}
-                      />
-                      <span className="input-group-text">–</span>
-                      <input
-                        name="max"
-                        type="number"
-                        className="form-control"
-                        value={activeSalaryFilter[1]}
-                        onChange={onSalarySliderChange}
-                      />
-                    </div>
-                    <div className="form-text">
-                      Detected: {salaryRange[0]} – {salaryRange[1]}
-                    </div>
-                  </div>
-                  <div className="col-12 d-flex justify-content-between align-items-center">
-                    <div>
-                      <strong>{total}</strong> results
-                    </div>
-                    <button
-                      className="btn btn-outline-secondary"
-                      onClick={clearFilters}
-                    >
-                      Clear Filters
-                    </button>
-                  </div>
-                </div>
+              <div className="card-header d-flex justify-content-between align-items-center">
+                <h5 className="mb-0">Search & Filters</h5>
+                <button
+                  className="btn btn-sm btn-outline-secondary"
+                  onClick={() => setIsSearchCollapsed(!isSearchCollapsed)}
+                >
+                  {isSearchCollapsed ? "Show" : "Hide"}
+                </button>
               </div>
-            </div>
-
-            <div className="d-none d-lg-block">
-              <table className="table table-hover">
-                <thead>
-                  <tr>
-                    <th
-                      onClick={() => toggleSort("role")}
-                      className="cursor-pointer"
-                    >
-                      <div className="d-flex justify-content-between align-items-center">
-                        <span>Role</span>
-                        <span className="sort-arrow">
-                          {sortKey === "role" &&
-                            (sortDir === "asc" ? "↑" : "↓")}
-                        </span>
-                      </div>
-                    </th>
-                    <th
-                      onClick={() => toggleSort("company")}
-                      className="cursor-pointer"
-                    >
-                      <div className="d-flex justify-content-between align-items-center">
-                        <span>Company</span>
-                        <span className="sort-arrow">
-                          {sortKey === "company" &&
-                            (sortDir === "asc" ? "↑" : "↓")}
-                        </span>
-                      </div>
-                    </th>
-                    <th
-                      onClick={() => toggleSort("salary")}
-                      className="cursor-pointer"
-                    >
-                      <div className="d-flex justify-content-between align-items-center">
-                        <span>Salary</span>
-                        <span className="sort-arrow">
-                          {sortKey === "salary" &&
-                            (sortDir === "asc" ? "↑" : "↓")}
-                        </span>
-                      </div>
-                    </th>
-                    <th
-                      onClick={() => toggleSort("location")}
-                      className="cursor-pointer"
-                    >
-                      <div className="d-flex justify-content-between align-items-center">
-                        <span>Location</span>
-                        <span className="sort-arrow">
-                          {sortKey === "location" &&
-                            (sortDir === "asc" ? "↑" : "↓")}
-                        </span>
-                      </div>
-                    </th>
-                    <th
-                      onClick={() => toggleSort("start_date")}
-                      className="cursor-pointer"
-                    >
-                      <div className="d-flex justify-content-between align-items-center">
-                        <span>Start Date</span>
-                        <span className="sort-arrow">
-                          {sortKey === "start_date" &&
-                            (sortDir === "asc" ? "↑" : "↓")}
-                        </span>
-                      </div>
-                    </th>
-                    <th>Notes</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pageItems.map((job) => (
-                    <tr key={job.id}>
-                      <td>{highlight(job.role || "N/A")}</td>
-                      <td>{highlight(job.company || "N/A")}</td>
-                      <td>{job.salary ? `$${job.salary} / hr` : "N/A"}</td>
-                      <td>{highlight(job.location || "N/A")}</td>
-                      <td>{formatDate(job.start_date)}</td>
-                      <td>
-                        {job.notes ? (
-                          <span title={job.notes}>
-                            {job.notes.slice(0, 60)}
-                            {job.notes.length > 60 ? "…" : ""}
-                          </span>
-                        ) : (
-                          "N/A"
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="d-lg-none">
-              {pageItems.map((job) => (
-                <div key={job.id} className="card mb-3">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between">
-                      <h5 className="card-title">
-                        {highlight(job.role || "N/A")}
-                      </h5>
-                      <h5>{job.salary ? `$${job.salary}/hr` : "N/A"}</h5>
+              {!isSearchCollapsed && (
+                <div className="card-body">
+                  <div className="row g-3">
+                    <div className="col-lg-12">
+                      <label htmlFor="q" className="form-label">
+                        Search
+                      </label>
+                      <input
+                        id="q"
+                        type="search"
+                        className="form-control form-control-lg"
+                        value={query}
+                        placeholder="Role, company, notes, location..."
+                        onChange={(e) => {
+                          setQuery(e.target.value);
+                          setPage(1);
+                        }}
+                      />
                     </div>
-                    <h6 className="card-subtitle mb-2 text-muted">
-                      {highlight(job.company || "N/A")}
-                    </h6>
-                    <p className="card-text">
-                      {highlight(job.location || "N/A")} • {job.program} •{" "}
-                      {formatDate(job.start_date)}
-                    </p>
-                    <p className="card-text">
-                      {job.notes ? (
-                        <>
-                          {job.notes.slice(0, 140)}
-                          {job.notes.length > 140 && "…"}
-                        </>
-                      ) : (
-                        <span className="text-muted">No notes</span>
-                      )}
-                    </p>
+                    <div className="col-md-4">
+                      <label htmlFor="program" className="form-label">
+                        Program
+                      </label>
+                      <select
+                        id="program"
+                        className="form-select"
+                        value={programFilter}
+                        onChange={(e) => {
+                          setProgramFilter(e.target.value);
+                          setPage(1);
+                        }}
+                      >
+                        {programs.map((p) => (
+                          <option key={p} value={p}>
+                            {p}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-md-4">
+                      <label htmlFor="location" className="form-label">
+                        Location
+                      </label>
+                      <select
+                        id="location"
+                        className="form-select"
+                        value={locationFilter}
+                        onChange={(e) => {
+                          setLocationFilter(e.target.value);
+                          setPage(1);
+                        }}
+                      >
+                        {locations.map((l) => (
+                          <option key={l} value={l}>
+                            {l}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-md-4">
+                      <label className="form-label">
+                        Salary range (CAD/hr)
+                      </label>
+                      <div className="input-group">
+                        <input
+                          name="min"
+                          type="number"
+                          className="form-control"
+                          value={activeSalaryFilter[0]}
+                          onChange={onSalarySliderChange}
+                        />
+                        <span className="input-group-text">–</span>
+                        <input
+                          name="max"
+                          type="number"
+                          className="form-control"
+                          value={activeSalaryFilter[1]}
+                          onChange={onSalarySliderChange}
+                        />
+                      </div>
+                      <div className="form-text">
+                        Detected: {salaryRange[0]} – {salaryRange[1]}
+                      </div>
+                    </div>
+                    <div className="col-12 d-flex justify-content-between align-items-center">
+                      <div>
+                        <strong>{total}</strong> results
+                      </div>
+                      <button
+                        className="btn btn-outline-secondary"
+                        onClick={clearFilters}
+                      >
+                        Clear Filters
+                      </button>
+                    </div>
                   </div>
                 </div>
-              ))}
+              )}
+            </div>
+
+            <div className="table-container">
+              <div className="d-none d-lg-block">
+                <table className="table table-hover">
+                  <thead>
+                    <tr>
+                      <th
+                        onClick={() => toggleSort("role")}
+                        className="cursor-pointer"
+                      >
+                        <div className="d-flex justify-content-between align-items-center">
+                          <span>Role</span>
+                          <span className="sort-arrow">
+                            {sortKey === "role" &&
+                              (sortDir === "asc" ? "↑" : "↓")}
+                          </span>
+                        </div>
+                      </th>
+                      <th
+                        onClick={() => toggleSort("company")}
+                        className="cursor-pointer"
+                      >
+                        <div className="d-flex justify-content-between align-items-center">
+                          <span>Company</span>
+                          <span className="sort-arrow">
+                            {sortKey === "company" &&
+                              (sortDir === "asc" ? "↑" : "↓")}
+                          </span>
+                        </div>
+                      </th>
+                      <th
+                        onClick={() => toggleSort("salary")}
+                        className="cursor-pointer"
+                      >
+                        <div className="d-flex justify-content-between align-items-center">
+                          <span>Salary</span>
+                          <span className="sort-arrow">
+                            {sortKey === "salary" &&
+                              (sortDir === "asc" ? "↑" : "↓")}
+                          </span>
+                        </div>
+                      </th>
+                      <th
+                        onClick={() => toggleSort("location")}
+                        className="cursor-pointer"
+                      >
+                        <div className="d-flex justify-content-between align-items-center">
+                          <span>Location</span>
+                          <span className="sort-arrow">
+                            {sortKey === "location" &&
+                              (sortDir === "asc" ? "↑" : "↓")}
+                          </span>
+                        </div>
+                      </th>
+                      <th
+                        onClick={() => toggleSort("start_date")}
+                        className="cursor-pointer"
+                      >
+                        <div className="d-flex justify-content-between align-items-center">
+                          <span>Start Date</span>
+                          <span className="sort-arrow">
+                            {sortKey === "start_date" &&
+                              (sortDir === "asc" ? "↑" : "↓")}
+                          </span>
+                        </div>
+                      </th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pageItems.map((job) => (
+                      <tr key={job.id}>
+                        <td>{highlight(job.role || "N/A")}</td>
+                        <td>{highlight(job.company || "N/A")}</td>
+                        <td>{job.salary ? `$${job.salary} / hr` : "N/A"}</td>
+                        <td>{highlight(job.location || "N/A")}</td>
+                        <td>{formatDate(job.start_date)}</td>
+                        <td>
+                          {job.notes ? (
+                            <span title={job.notes}>
+                              {job.notes.slice(0, 60)}
+                              {job.notes.length > 60 ? "…" : ""}
+                            </span>
+                          ) : (
+                            "N/A"
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="d-lg-none">
+                {pageItems.map((job) => (
+                  <div key={job.id} className="card mb-3">
+                    <div className="card-body">
+                      <div className="d-flex justify-content-between">
+                        <h5 className="card-title">
+                          {highlight(job.role || "N/A")}
+                        </h5>
+                        <h5>{job.salary ? `$${job.salary}/hr` : "N/A"}</h5>
+                      </div>
+                      <h6 className="card-subtitle mb-2 text-muted">
+                        {highlight(job.company || "N/A")}
+                      </h6>
+                      <p className="card-text">
+                        {highlight(job.location || "N/A")} • {job.program} •{" "}
+                        {formatDate(job.start_date)}
+                      </p>
+                      <p className="card-text">
+                        {job.notes ? (
+                          <>
+                            {job.notes.slice(0, 140)}
+                            {job.notes.length > 140 && "…"}
+                          </>
+                        ) : (
+                          <span className="text-muted">No notes</span>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {pageItems.length === 0 && (

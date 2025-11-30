@@ -192,3 +192,14 @@ strong {
     width: 1em;
     text-align: left;
 }
+
+main.container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 150px); /* Adjust the height as needed */
+}
+
+.table-container {
+    flex-grow: 1;
+    overflow-y: auto;
+}
