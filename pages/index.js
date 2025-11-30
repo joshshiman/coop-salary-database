@@ -56,8 +56,6 @@ export default function Home({ jobs = [], error }) {
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [sortKey, setSortKey] = useState("start_date");
   const [sortDir, setSortDir] = useState("desc"); // 'asc' | 'desc'
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(50);
   const [expandedId, setExpandedId] = useState(null);
   const [salaryRange, setSalaryRange] = useState([0, 0]); // [min,max]
   const [activeSalaryFilter, setActiveSalaryFilter] = useState([0, 0]); // applied
@@ -157,17 +155,7 @@ export default function Home({ jobs = [], error }) {
     return arr;
   }, [filtered, sortKey, sortDir]);
 
-  /* Pagination */
   const total = sorted.length;
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  useEffect(() => {
-    if (page > totalPages) setPage(1);
-  }, [totalPages]);
-
-  const pageItems = useMemo(() => {
-    const start = (page - 1) * pageSize;
-    return sorted.slice(start, start + pageSize);
-  }, [sorted, page, pageSize]);
 
   /* Handlers */
   const toggleSort = (key) => {
@@ -298,7 +286,6 @@ export default function Home({ jobs = [], error }) {
                         placeholder="Role, company, notes, location..."
                         onChange={(e) => {
                           setQuery(e.target.value);
-                          setPage(1);
                         }}
                       />
                     </div>
@@ -312,7 +299,6 @@ export default function Home({ jobs = [], error }) {
                         value={programFilter}
                         onChange={(e) => {
                           setProgramFilter(e.target.value);
-                          setPage(1);
                         }}
                       >
                         {programs.map((p) => (
@@ -332,7 +318,6 @@ export default function Home({ jobs = [], error }) {
                         value={locationFilter}
                         onChange={(e) => {
                           setLocationFilter(e.target.value);
-                          setPage(1);
                         }}
                       >
                         {locations.map((l) => (
@@ -452,7 +437,7 @@ export default function Home({ jobs = [], error }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {pageItems.map((job) => (
+                    {sorted.map((job) => (
                       <tr key={job.id}>
                         <td>{highlight(job.role || "N/A")}</td>
                         <td>{highlight(job.company || "N/A")}</td>
@@ -476,7 +461,7 @@ export default function Home({ jobs = [], error }) {
               </div>
 
               <div className="d-lg-none">
-                {pageItems.map((job) => (
+                {sorted.map((job) => (
                   <div key={job.id} className="card mb-3">
                     <div className="card-body">
                       <div className="d-flex justify-content-between">
@@ -508,61 +493,12 @@ export default function Home({ jobs = [], error }) {
               </div>
             </div>
 
-            {pageItems.length === 0 && (
+            {sorted.length === 0 && (
               <div className="text-center p-5">
                 <h3>No results found</h3>
                 <p>Try adjusting your filters.</p>
               </div>
             )}
-
-            <nav
-              aria-label="Pagination"
-              className="d-flex justify-content-center mt-4"
-            >
-              <ul className="pagination">
-                <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
-                  <a className="page-link" href="#" onClick={() => setPage(1)}>
-                    « First
-                  </a>
-                </li>
-                <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
-                  <a
-                    className="page-link"
-                    href="#"
-                    onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  >
-                    ‹ Prev
-                  </a>
-                </li>
-                <li className="page-item disabled">
-                  <a className="page-link" href="#">
-                    Page {page} / {totalPages}
-                  </a>
-                </li>
-                <li
-                  className={`page-item ${page === totalPages ? "disabled" : ""}`}
-                >
-                  <a
-                    className="page-link"
-                    href="#"
-                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  >
-                    Next ›
-                  </a>
-                </li>
-                <li
-                  className={`page-item ${page === totalPages ? "disabled" : ""}`}
-                >
-                  <a
-                    className="page-link"
-                    href="#"
-                    onClick={() => setPage(totalPages)}
-                  >
-                    Last »
-                  </a>
-                </li>
-              </ul>
-            </nav>
           </>
         )}
       </main>

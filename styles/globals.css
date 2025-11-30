@@ -1,176 +1,141 @@
 :root {
-    --background: #ffffff;
-    --ui-elements: #f8f9fa;
-    --text-color: #212529;
-    --accent-color: #38b2ac;
-    --border-color: #dee2e6;
+    --background: #f0f0f0;
+    --text-color: #000000;
+    --accent-color: #ff00ff;
+    --border-color: #000000;
     --card-bg: #ffffff;
-    --navbar-bg: #f8f9fa;
-    --mark-bg: #f0ad4e;
-    --mark-color: #000;
+    --navbar-bg: #ffffff;
+    --mark-bg: #ffff00;
+    --mark-color: #000000;
+    --button-bg: #ffffff;
+    --button-text: #000000;
+    --shadow: 4px 4px 0px #000000;
 }
 
 [data-theme="dark"] {
-    --background: #1a202c;
-    --ui-elements: #2d3748;
-    --text-color: #e2e8f0;
-    --accent-color: #38b2ac;
-    --border-color: #4a5568;
-    --card-bg: #2d3748;
-    --navbar-bg: #2d3748;
-    --mark-bg: var(--accent-color);
-    --mark-color: var(--background);
+    --background: #1a1a1a;
+    --text-color: #ffffff;
+    --accent-color: #00ff00;
+    --border-color: #ffffff;
+    --card-bg: #2a2a2a;
+    --navbar-bg: #2a2a2a;
+    --mark-bg: #ff00ff;
+    --mark-color: #000000;
+    --button-bg: #2a2a2a;
+    --button-text: #ffffff;
+    --shadow: 4px 4px 0px #ffffff;
 }
 
 html,
 body {
     padding: 0;
     margin: 0;
-    font-family:
-        "Montserrat",
-        -apple-system,
-        BlinkMacSystemFont,
-        Segoe UI,
-        Roboto,
-        Oxygen,
-        Ubuntu,
-        Cantarell,
-        Fira Sans,
-        Droid Sans,
-        Helvetica Neue,
-        sans-serif;
+    font-family: "Courier New", Courier, monospace;
     background-color: var(--background) !important;
     color: var(--text-color);
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease;
 }
 
 a {
     color: var(--accent-color);
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 * {
     box-sizing: border-box;
+    border-radius: 0 !important;
 }
 
 .logo-font {
-    font-family: "Montserrat", sans-serif;
+    font-family: "Courier New", Courier, monospace;
     font-weight: 700;
     font-size: 1.5rem;
 }
 
-.bg-darker {
-    background-color: var(--ui-elements) !important;
-}
-
 .card {
     background-color: var(--card-bg);
-    border-color: var(--border-color);
+    border: 2px solid var(--border-color);
+    box-shadow: var(--shadow);
 }
 
 .navbar {
     background-color: var(--navbar-bg) !important;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
 }
 
 .table {
-    --bs-table-bg: var(--ui-elements);
+    --bs-table-bg: var(--card-bg);
     --bs-table-border-color: var(--border-color);
     --bs-table-color: var(--text-color);
-    --bs-table-hover-bg: #374151;
+    --bs-table-hover-bg: var(--accent-color);
+    border: 2px solid var(--border-color);
+}
+
+.table th,
+.table td {
+    border: 1px solid var(--border-color);
 }
 
 [data-theme="light"] .table {
-    --bs-table-hover-bg: #f1f5f9;
+    --bs-table-hover-bg: var(--accent-color);
 }
 
 .form-control,
 .form-select {
     background-color: var(--background) !important;
     color: var(--text-color) !important;
-    border-color: var(--border-color) !important;
+    border: 2px solid var(--border-color) !important;
+    box-shadow: none !important;
 }
 
 .form-control::placeholder {
-    color: #a0aec0;
+    color: var(--text-color);
+    opacity: 0.5;
 }
 
 .form-control:focus,
 .form-select:focus {
     background-color: var(--background);
     color: var(--text-color);
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 0.25rem rgba(56, 178, 172, 0.25);
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 0 2px var(--accent-color) !important;
 }
 
 .cursor-pointer {
     cursor: pointer;
 }
 
-.page-link {
-    background-color: var(--ui-elements);
-    color: var(--text-color);
-    border-color: var(--border-color);
-}
-
-.page-link:hover {
-    background-color: #e2e8f0;
-}
-
-[data-theme="dark"] .page-link:hover {
-    background-color: #374151;
-}
-
-.page-item.disabled .page-link {
-    background-color: var(--background);
-    color: #6c757d;
-    border-color: var(--border-color);
-}
-
-.page-item.active .page-link {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
-    color: var(--background);
-}
-
 mark {
     background-color: var(--mark-bg);
     padding: 0.2em;
-    border-radius: 3px;
     color: var(--mark-color);
 }
 
-.btn-outline-light {
-    color: var(--accent-color) !important;
-    border-color: var(--accent-color) !important;
+.btn {
+    border: 2px solid var(--border-color) !important;
+    background-color: var(--button-bg) !important;
+    color: var(--button-text) !important;
+    box-shadow: var(--shadow) !important;
+    transition: all 0.1s ease-in-out !important;
 }
 
-.btn-outline-light:hover {
-    color: var(--background) !important;
-    background-color: var(--accent-color) !important;
-    border-color: var(--accent-color) !important;
+.btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px var(--border-color) !important;
 }
 
-.btn-outline-secondary {
-    color: #a0aec0 !important;
-    border-color: #a0aec0 !important;
-}
-
-.btn-outline-secondary:hover {
-    color: var(--background) !important;
-    background-color: #a0aec0 !important;
-    border-color: #a0aec0 !important;
+.btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px var(--border-color) !important;
 }
 
 .text-muted {
-    color: #a0aec0 !important;
+    color: var(--text-color) !important;
+    opacity: 0.7;
 }
 
 .input-group-text {
     background-color: var(--ui-elements) !important;
-    border-color: var(--border-color) !important;
+    border: 2px solid var(--border-color) !important;
     color: var(--text-color) !important;
 }
 
@@ -196,10 +161,13 @@ strong {
 main.container {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 150px); /* Adjust the height as needed */
+    height: calc(100vh - 100px); /* Adjust the height as needed */
 }
 
 .table-container {
     flex-grow: 1;
     overflow-y: auto;
+    border: 2px solid var(--border-color);
+    padding: 1rem;
+    background: var(--card-bg);
 }
