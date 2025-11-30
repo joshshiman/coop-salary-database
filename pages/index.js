@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import Head from "next/head";
-import Image from "next/image";
 import { useTheme } from "../context/ThemeContext";
 
 export async function getServerSideProps() {
@@ -228,13 +227,6 @@ export default function Home({ jobs = [], error }) {
       <nav className="navbar navbar-expand-lg">
         <div className="container">
           <a className="navbar-brand logo-font" href="#">
-            <Image
-              src="/logo.png"
-              alt="Co-op salary logo"
-              width={40}
-              height={40}
-              className="d-inline-block align-text-top me-2"
-            />
             WLU Co-op Salary
           </a>
           <div className="d-flex align-items-center">
