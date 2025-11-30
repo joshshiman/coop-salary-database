@@ -55,7 +55,6 @@ export default function Home({ jobs = [], error }) {
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [sortKey, setSortKey] = useState("start_date");
   const [sortDir, setSortDir] = useState("desc"); // 'asc' | 'desc'
-  const [expandedId, setExpandedId] = useState(null);
   const [salaryRange, setSalaryRange] = useState([0, 0]); // [min,max]
   const [activeSalaryFilter, setActiveSalaryFilter] = useState([0, 0]); // applied
   const [programFilter, setProgramFilter] = useState("all");
@@ -157,15 +156,6 @@ export default function Home({ jobs = [], error }) {
   const total = sorted.length;
 
   /* Handlers */
-  const toggleSort = (key) => {
-    if (sortKey === key) {
-      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
-    } else {
-      setSortKey(key);
-      setSortDir("asc");
-    }
-  };
-
   const onSalarySliderChange = (e) => {
     // simple two inputs: min and max number inputs
     const name = e.target.name;
@@ -183,20 +173,6 @@ export default function Home({ jobs = [], error }) {
     setActiveSalaryFilter(salaryRange);
     setSortKey("start_date");
     setSortDir("desc");
-  };
-
-  const copyPermalink = (id) => {
-    const url = new URL(window.location.href);
-    url.searchParams.set("id", id);
-    navigator.clipboard
-      .writeText(url.toString())
-      .then(() => {
-        // small feedback: toggle expanded ID to force re-render for aria-live (we'll use title change)
-        setExpandedId(id);
-      })
-      .catch(() => {
-        // ignore
-      });
   };
 
   const highlight = (text) => {
@@ -320,6 +296,36 @@ export default function Home({ jobs = [], error }) {
                       </select>
                     </div>
                     <div className="col-md-4">
+                      <label htmlFor="sort" className="form-label">
+                        Sort by
+                      </label>
+                      <select
+                        id="sort"
+                        className="form-select"
+                        value={sortKey}
+                        onChange={(e) => {
+                          setSortKey(e.target.value);
+                        }}
+                      >
+                        <option value="start_date">Start Date</option>
+                        <option value="role">Role</option>
+                        <option value="company">Company</option>
+                        <option value="salary">Salary</option>
+                        <option value="location">Location</option>
+                      </select>
+                    </div>
+                    <div className="col-md-2">
+                      <label className="form-label">&nbsp;</label>
+                      <button
+                        className="btn btn-outline-secondary w-100"
+                        onClick={() =>
+                          setSortDir((d) => (d === "asc" ? "desc" : "asc"))
+                        }
+                      >
+                        {sortDir === "asc" ? "↑ Asc" : "↓ Desc"}
+                      </button>
+                    </div>
+                    <div className="col-md-6">
                       <label className="form-label">
                         Salary range (CAD/hr)
                       </label>
@@ -361,98 +367,7 @@ export default function Home({ jobs = [], error }) {
             </div>
 
             <div className="table-container">
-              <div className="d-none d-lg-block">
-                <table className="table table-hover">
-                  <thead>
-                    <tr>
-                      <th
-                        onClick={() => toggleSort("role")}
-                        className="cursor-pointer"
-                      >
-                        <div className="d-flex justify-content-between align-items-center">
-                          <span>Role</span>
-                          <span className="sort-arrow">
-                            {sortKey === "role" &&
-                              (sortDir === "asc" ? "↑" : "↓")}
-                          </span>
-                        </div>
-                      </th>
-                      <th
-                        onClick={() => toggleSort("company")}
-                        className="cursor-pointer"
-                      >
-                        <div className="d-flex justify-content-between align-items-center">
-                          <span>Company</span>
-                          <span className="sort-arrow">
-                            {sortKey === "company" &&
-                              (sortDir === "asc" ? "↑" : "↓")}
-                          </span>
-                        </div>
-                      </th>
-                      <th
-                        onClick={() => toggleSort("salary")}
-                        className="cursor-pointer"
-                      >
-                        <div className="d-flex justify-content-between align-items-center">
-                          <span>Salary</span>
-                          <span className="sort-arrow">
-                            {sortKey === "salary" &&
-                              (sortDir === "asc" ? "↑" : "↓")}
-                          </span>
-                        </div>
-                      </th>
-                      <th
-                        onClick={() => toggleSort("location")}
-                        className="cursor-pointer"
-                      >
-                        <div className="d-flex justify-content-between align-items-center">
-                          <span>Location</span>
-                          <span className="sort-arrow">
-                            {sortKey === "location" &&
-                              (sortDir === "asc" ? "↑" : "↓")}
-                          </span>
-                        </div>
-                      </th>
-                      <th
-                        onClick={() => toggleSort("start_date")}
-                        className="cursor-pointer"
-                      >
-                        <div className="d-flex justify-content-between align-items-center">
-                          <span>Start Date</span>
-                          <span className="sort-arrow">
-                            {sortKey === "start_date" &&
-                              (sortDir === "asc" ? "↑" : "↓")}
-                          </span>
-                        </div>
-                      </th>
-                      <th>Notes</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sorted.map((job) => (
-                      <tr key={job.id}>
-                        <td>{highlight(job.role || "N/A")}</td>
-                        <td>{highlight(job.company || "N/A")}</td>
-                        <td>{job.salary ? `$${job.salary} / hr` : "N/A"}</td>
-                        <td>{highlight(job.location || "N/A")}</td>
-                        <td>{formatDate(job.start_date)}</td>
-                        <td>
-                          {job.notes ? (
-                            <span title={job.notes}>
-                              {job.notes.slice(0, 60)}
-                              {job.notes.length > 60 ? "…" : ""}
-                            </span>
-                          ) : (
-                            "N/A"
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="d-lg-none">
+              <div>
                 {sorted.map((job) => (
                   <div key={job.id} className="card mb-3">
                     <div className="card-body">
